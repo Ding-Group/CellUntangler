@@ -19,8 +19,6 @@ import warnings
 import matplotlib.pyplot
 import torch
 from torch import Tensor
-# from tensorboardX import SummaryWriter
-# import torchvision
 
 EpochStatsType = Dict[str, float]
 
@@ -28,27 +26,11 @@ EpochStatsType = Dict[str, float]
 class Stats:
 
     def __init__(self,
-                 # chkpt_dir: str,
-                 # img_dims: Optional[Tuple[int, ...]] = None,
                  global_step: int = 0,
                  epoch: int = 0):
-                 # train_statistics: bool = False):
-                 # show_embeddings: int = 0,
-                 # export_embeddings: int = 0,
-                 # test_every: int = 0):
-        # self._summary_writer = SummaryWriter(chkpt_dir)
         self._global_step = global_step
         self._epoch = epoch
-        # self._img_dims = img_dims
-        # self.train_statistics = train_statistics
-        # self.show_embeddings = show_embeddings
-        # self.export_embeddings = export_embeddings
-        # self.test_every = test_every
         self.test_epochs = 0
-
-    # @property
-    # def img_dims(self) -> Optional[Tuple[int, ...]]:
-        # return self._img_dims
 
     @property
     def global_step(self) -> int:
@@ -72,33 +54,6 @@ class Stats:
     def epoch(self, value: int) -> None:
         self._epoch = value
 
-    # def add_scalar(self, tag: str, scalar_value: Any, epoch: bool = False) -> None:
-        # self._summary_writer.add_scalar(tag=tag, scalar_value=scalar_value, global_step=self._step(epoch))
-
-    # @staticmethod
-    # def _show_images(x: Tensor, dims: Tuple[int, ...]) -> Tensor:
-        # return torchvision.utils.make_grid(x.view(*dims))
-
-    # def add_images(self, tag: str, imgs: Tensor, dims: Optional[Tuple[int, ...]] = None, epoch: bool = False) -> None:
-        # if dims is None:
-            # dims = self._img_dims
-
-        # if dims is None:
-            # warnings.warn("No img dims specified, will not show reconstructions in TensorBoard.")
-            # return
-
-        # img_tensor = Stats._show_images(imgs, dims)
-        # self._summary_writer.add_image(tag=tag, img_tensor=img_tensor, global_step=self._step(epoch))
-
-    # def add_histogram(self, tag: str, values: Tensor, epoch: bool = False) -> None:
-        # self._summary_writer.add_histogram(tag=tag, values=values, global_step=self._step(epoch))
-
-    # def add_embedding(self, tag: str, mat: Tensor, metadata: List[str], epoch: bool = False) -> None:
-        # self._summary_writer.add_embedding(tag=tag, mat=mat, metadata=metadata, global_step=self._step(epoch))
-
-    # def add_figure(self, tag: str, figure: matplotlib.pyplot.figure, epoch: bool = False) -> None:
-        # self._summary_writer.add_figure(tag=tag, figure=figure, global_step=self._step(epoch))
-
 
 def _to_print(stats: Union["BatchStatsFloat", "EpochStats"]) -> EpochStatsType:
     return {
@@ -108,17 +63,15 @@ def _to_print(stats: Union["BatchStatsFloat", "EpochStats"]) -> EpochStatsType:
         "ll": 0.0 if stats.log_likelihood is None else stats.log_likelihood,
         "mi": 0.0 if stats.mutual_info is None else stats.mutual_info,
         "cov_norm": 0.0 if stats.cov_norm is None else stats.cov_norm,
-        "beta": stats.beta,
-        # "hsic": stats.hsic
-    }
+        "beta": stats.beta
+        }
 
 
 class BatchStatsFloat:
 
     def __init__(self, bce: Tensor, kl: Tensor, elbo: Tensor, log_likelihood: Optional[Tensor],
                  mutual_info: Optional[Tensor], cov_norm: Optional[Tensor], component_kl: List[Tensor],
-                 beta: float,
-                 # hsic: Optional[float]
+                 beta: float
                  ) -> None:
         self.bce = bce.item()
         self.kl = kl.item()
@@ -128,21 +81,7 @@ class BatchStatsFloat:
         self.cov_norm = None if cov_norm is None else cov_norm.item()
         self.component_kl = [x.item() for x in component_kl]
         self.beta = beta
-        # self.hsic = None if hsic is None else hsic.item()
-        
-    # def summaries(self, stats: Stats, prefix: str = "train/batch") -> None:
-        # stats.add_scalar(prefix + "/bce", self.bce)
-        # stats.add_scalar(prefix + "/kl", self.kl)
-        # stats.add_scalar(prefix + "/elbo", self.elbo)
-        # if self.log_likelihood is not None:
-            # stats.add_scalar(prefix + "/log_likelihood", self.log_likelihood)
-        # if self.mutual_info is not None:
-            # stats.add_scalar(prefix + "/mutual_info", self.mutual_info)
-        # if self.cov_norm is not None:
-            # stats.add_scalar(prefix + "/cov_norm", self.cov_norm)
-        # if self.hsic is not None:
-            # stats.add_scalar(prefix + "/hsic", self.hsic)
-
+    
     def to_print(self) -> EpochStatsType:
         return _to_print(self)
 
@@ -155,13 +94,9 @@ class BatchStats:
                  beta: float,
                  log_likelihood: Optional[Tensor] = None,
                  mutual_info: Optional[Tensor] = None,
-                 cov_norm: Optional[Tensor] = None,
-                 # hsic: Optional[float] = None,
-                 # reconstruction_term_weight: float = 1
+                 cov_norm: Optional[Tensor] = None
                  ) -> None:
         self._beta = beta
-        # self._reconstruction_term_weight = reconstruction_term_weight
-        # print(self._reconstruction_term_weight)
         self._bce = bce
         self._component_kl = component_kl
         self._component_kl_mean = [x.sum(dim=0) for x in component_kl]
@@ -171,11 +106,7 @@ class BatchStats:
         
         self._kl_val = self._kl()
         self._elbo_val = self._elbo(beta)
-        # self._hsic = hsic
-
-        # self._elbo1_val = self._elbo1(beta)
-        # self._elbo2_val = self._elbo2(beta)
-
+    
     @property
     def bce(self) -> Tensor:
         return self._bce.sum(dim=0)
@@ -202,49 +133,17 @@ class BatchStats:
 
     @property
     def elbo(self) -> Tensor:
-        # if self._hsic is None:
         return self._elbo_val.sum(dim=-1)
-        # else:
-            # return self._elbo_val.sum(dim=-1) - self._hsic
-
-    # @property
-    # def elbo1(self) -> Tensor:
-        # return self._elbo1_val.sum(dim=-1)
-
-    # @property
-    # def elbo2(self) -> Tensor:
-          # return self._elbo2_val.sum(dim=-1)
-
+    
     @property
     def beta(self) -> float:
         return self._beta
 
-    # @property
-    # def hsic(self) -> float:
-        # return self._hsic
-
-    # @property
-    # def reconstruction_term_weight(self):
-        # return self._reconstruction_term_weight
-
     def _kl(self) -> Tensor:
-        # self._component_kl[0] = self._component_kl[0] * self._beta
         return torch.sum(torch.cat([x.unsqueeze(dim=-1) for x in self._component_kl], dim=-1), dim=-1)
-
-    # def _elbo1(self, beta: float) -> Tensor:
-        # kl_val = self._component_kl[0]
-        # assert self._bce.shape == kl_val.shape
-        # return (self._bce * self._reconstruction_term_weight - beta * kl_val).sum(dim=0)
-
-    # def _elbo2(self, beta: float) -> Tensor:
-        # kl_val = self._component_kl[1]
-        # assert self._bce.shape == kl_val.shape
-        # return (self._bce * self._reconstruction_term_weight - beta * kl_val).sum(dim=0)
 
     def _elbo(self, beta: float) -> Tensor:
         assert self._bce.shape == self._kl_val.shape
-        # return (self._bce - beta * self._kl_val).sum(dim=0)
-        # return (self._bce * self._reconstruction_term_weight - beta * self._kl_val).sum(dim=0)
         return (self._bce - self._kl_val).sum(dim=0)
 
     def convert_to_float(self) -> BatchStatsFloat:
@@ -255,8 +154,7 @@ class BatchStats:
                                self.mutual_info,
                                self.cov_norm,
                                self.component_kl,
-                               beta=self.beta,
-                               # hsic=self.hsic
+                               beta=self.beta
                                )
 
 
@@ -276,8 +174,6 @@ class EpochStats:
         self.beta = bs[0].beta
         assert sum(self.beta == b.beta for b in bs) == len(bs)  # Assert all betas in epoch are the same.
 
-        # self.hsic = 0
-
         for batch in bs:
             self.bce += batch.bce
             self.kl += batch.kl
@@ -290,9 +186,7 @@ class EpochStats:
                 self.cov_norm += batch.cov_norm
             for i in range(len(self.component_kl)):
                 self.component_kl[i] += batch.component_kl[i]
-            # if batch.hsic:
-                # self.hsic += batch.hsic
-        # print(self.hsic, length)
+        
         self.bce /= length
         self.kl /= length
         self.elbo /= length
@@ -301,23 +195,6 @@ class EpochStats:
         self.cov_norm /= length
         for i in range(len(self.component_kl)):
             self.component_kl[i] /= length
-        # self.hsic /= length
-
+    
     def to_print(self) -> EpochStatsType:
         return _to_print(self)
-
-    # def summaries(self, stats: Stats, prefix: str = "train/epoch") -> None:
-        # stats.add_scalar(prefix + "/beta", self.beta, epoch=True)
-        # stats.add_scalar(prefix + "/bce", self.bce, epoch=True)
-        # stats.add_scalar(prefix + "/kl", self.kl, epoch=True)
-        # stats.add_scalar(prefix + "/elbo", self.elbo, epoch=True)
-        # for i in range(len(self.component_kl)):
-            # stats.add_scalar(prefix + f"/kl_comp_{i}", self.component_kl[i], epoch=True)
-        # if self.log_likelihood:
-            # stats.add_scalar(prefix + "/log_likelihood", self.log_likelihood, epoch=True)
-        # if self.mutual_info:
-            # stats.add_scalar(prefix + "/mutual_info", self.mutual_info, epoch=True)
-        # if self.cov_norm:
-            # stats.add_scalar(prefix + "/cov_norm", self.cov_norm, epoch=True)
-        # if self.hsic:
-            # stats.add_scalar(prefix + "/hsic", self.hsic, epoch=True)

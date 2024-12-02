@@ -157,7 +157,7 @@ def plot_gene_change(ordered_adata, phase, gene_name, colors=None, labels=None, 
     plt.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.21, 1))
     plt.tight_layout()
     # plt.savefig(os.path.join(save_path, f'savgol_{gene_name}_{phase}_ordered_x_mb_normalize_log_italicize.png'))
-    plt.savefig(os.path.join(save_path, f'savgol_{gene_name}_{phase}_ordered_normalize_log.png'))
+    plt.savefig(os.path.join(save_path, f'savgol_{gene_name}_{phase}_ordered_normalize_log_layer{layer}.png'))
     plt.show()
     plt.close()
     # sc.pp.pca(adata)

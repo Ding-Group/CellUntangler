@@ -15,13 +15,7 @@
 
 from typing import Any
 from .vae_dataset import VaeDataset
-# from .umi_data import UMIVaeDataset
+
 __all__ = [
-    "VaeDataset",
-    "create_dataset",
+  "VaeDataset"
 ]
-def create_dataset(dataset_type: str, *args: Any, **kwargs: Any) -> VaeDataset:
-    if dataset_type == 'DC':
-        return UMIVaeDataset(*args, **kwargs)
-    else:
-        raise ValueError(f"Unknown dataset type: '{dataset_type}'.")

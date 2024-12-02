@@ -8,12 +8,10 @@ def get_config():
 
     # Hyperparameters for dataset
     config.batch_size = 128
-    # config.dataset_size = None
-
+    
     # Hyperparameters for model
     # True to use a single parameter for the covariance matrix, False otherwise
     config.scalar_parametrization = False
-    # config.use_relu = False
     # If the dataset has no batches, 1 or [1]
     # Otherwise, it should be a list of integers , one integer for each batch
     # The integer inidicates how many of each batch there are
@@ -34,9 +32,6 @@ def get_config():
     config.activation = "gelu"
     # The size of the last layer of the encoder
     config.h_dim = 32
-    # config.use_hsic = False
-    # config.use_average_hsic = False
-    # config.hsic_weight = 1000
     # True to use stop gradient, False otherwise
     config.use_z2_no_grad = False
     # The epoch to start using stop gradient if config.use_z2_no_grad = True
@@ -66,14 +61,5 @@ def get_config():
     config.learning_rate = 0.001
     # True to use the fixed curvature, False to learn the curvature
     config.fixed_curvature = True
-
-    # Hyperparameters for reconstruction
-    # config.reconstruction_term_weight = 1
-    # config.use_btcvae = False
-    # config.btcvae_beta = 1
-    
-    # Set the batch vector to be all zero if there is only one batch
-    # config.zero_batch = False
-    # config.print_batch = False
 
     return config

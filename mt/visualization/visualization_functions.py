@@ -123,8 +123,11 @@ def compute_umap(adata,
   sc.pl.umap(adata, color=color, save=save, palette=palette, title=title)
 
 
-def plot_gene_change(ordered_adata, phase, gene_name, colors=None, labels=None, save_path=None, ccPhase_palette=None):
-    gene_expression = ordered_adata[:, gene_name].X.squeeze(-1)
+def plot_gene_change(ordered_adata, phase, gene_name, colors=None, labels=None, save_path=None, ccPhase_palette=None, layer=""):
+    if layer:
+        gene_expression = ordered_adata[:, gene_name].layers[layer].squeeze(-1)
+    else:
+        gene_expression = ordered_adata[:, gene_name].X.squeeze(-1)
     print(gene_expression)
     if labels is not None:
         categories = labels.cat.categories

@@ -25,7 +25,7 @@ Install Python 3.7+.
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.
 * `THIRD_PARTY.md` - List of third party software used in this thesis.
-* celluntangler_hela_tutorial.ipynb - A tutorial for using CellUntangler on a dataset of HeLa cells.
+* `celluntangler_hela_tutorial.ipynb` - A tutorial for using CellUntangler on a dataset of HeLa cells.
 
 ## Usage
 

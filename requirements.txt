@@ -1,6 +1,6 @@
 anndata==0.11.1
 bokeh==3.6.1
-geostats==2.8.0
+geomstats==2.8.0
 geoopt==0.50.0
 matplotlib==3.8.0
 ml_collections==0.1.0

@@ -11,3 +11,11 @@ Parts of the code are from https://github.com/emilemathieu/pvae, licensed under 
 ## Hyperspherical Variational Auto-Encoders
 
 Parts of the code are from https://github.com/nicola-decao/s-vae-pytorch, licensed under the MIT License (Copyright (c) 2018 Nicola De Cao). 
+
+## Mixed-Curvature Variational Auto-Encoder
+Parts of the code are from https://github.com/oskopek/mvae, licensed under the ASL 2.0 License (Copyright (c) 2020 Ondrej Skopek).
+
+## Rotated Hyperbolic Wrapped Normal Distribution
+Parts of the code are from https://github.com/ml-postech/RoWN (Copyright (c) 2022 Seunghyuk Cho).
+
+We thank the respective authors for making their code publicly available.

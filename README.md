@@ -9,14 +9,9 @@ This repository contains a PyTorch implementation of CellUntangler.
 ## Installation
 
 Install Python 3.7+.
-To install all dependencies, make sure you have installed [conda](https://docs.conda.io/en/latest/miniconda.html), and run
 
-```bash
-make conda
-conda activate pt
-make download_data
-```
-
+1. Clone the repository using `!git clone https://github.com/Ding-Group/CellUntangler`.
+2. Install the dependencies found in `requirements.txt` with `pip install -r CellUntangler/requirements.txt` or if the working directory is CellUntangler, `pip install -r requirements.txt.`
 
 ## Structure
 
@@ -30,6 +25,7 @@ make download_data
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.
 * `THIRD_PARTY.md` - List of third party software used in this thesis.
+* celluntangler_hela_tutorial.ipynb - A tutorial for using CellUntangler on a dataset of HeLa cells.
 
 ## Usage
 
@@ -47,4 +43,4 @@ To specifiy the dimension of the space, an integer is placed after the letter. *
 
 The different subspaces are separated by `,` or `, `. *E.g.*, `r2,e10` or `r2, e10` denotes a latent space with two subspaces where the first subspace is the hyperbolic space with the RoWN and a dimension of 2 and the second subspace is the Euclidean subspace with a dimension of 10.
 
-In the `tutorials` directory, we provide specific examples of using CellUntangler.
+In the `CellUntangler` directory, we provide specific examples of using CellUntangler.

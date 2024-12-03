@@ -9,5 +9,5 @@ pandas==2.2.2
 scanpy==1.10.4
 scikit-learn==1.5.2
 scipy==1.13.1
-pytorch==2.5.1+cu121
+torch==2.5.1+cu121
 torchvision==0.20.1+cu121

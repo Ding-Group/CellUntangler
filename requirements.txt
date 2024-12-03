@@ -6,7 +6,7 @@ geostats==2.8.0
 geoopt==0.50.0
 matplotlib==3.8.0
 ml_collections==0.1.0
-numpy=1.26.4
+numpy==1.26.4
 os
 pandas==2.2.2
 scanpy==1.10.4

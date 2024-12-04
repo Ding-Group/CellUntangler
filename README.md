@@ -16,9 +16,9 @@ Install Python 3.7+.
 ## Structure
 
 * `src/` - Source folder.
-  * `data/` - Data loading, preprocessing, batching, and pre-trained embeddings.
+  * `data/` - Data loading, preprocessing and batching.
   * `celluntangler/` - Model directory. Note that models heavily use inheritance!
-  * `visualization/` - Utilities for visualization of latent spaces or training statistics.
+  * `visualization/` - Utilities for visualization of latent spaces.
 * `README.md` - This manual.
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.

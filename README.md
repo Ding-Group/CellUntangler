@@ -15,12 +15,10 @@ Install Python 3.7+.
 
 ## Structure
 
-* `mathematica/` - Mathematica scripts (various formula derivations, etc).
-* `mt/` - Source folder.
+* `src/` - Source folder.
   * `data/` - Data loading, preprocessing, batching, and pre-trained embeddings.
-  * `mvae/` - Model directory. Note that models heavily use inheritance!
+  * `celluntangler/` - Model directory. Note that models heavily use inheritance!
   * `visualization/` - Utilities for visualization of latent spaces or training statistics.
-* `tests/` - (A few) unit tests.
 * `README.md` - This manual.
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.

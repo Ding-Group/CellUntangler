@@ -194,7 +194,6 @@ class ModelVAE(torch.nn.Module):
         :param n: Number of MC samples
         :return: Monte Carlo estimate of log-likelihood.
         """
-        print('Computing log_likelihood!!!')
         sample_shape = torch.Size([n])
         batch_size = x.shape[0]
         prob_shape = torch.Size([n, batch_size])
@@ -226,7 +225,7 @@ class ModelVAE(torch.nn.Module):
 
         concat_z = torch.cat(zs, dim=-1)
         concat_z = concat_z.transpose(0, 1).flatten(0, 1)
-        self.batch = self.batch.repeat((n,1,1))
+        self.batch = self.batch.repeat((n, 1, 1))
         self.batch = self.batch.transpose(0, 1).flatten(0, 1)
         # Copied from forward() below
         mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
@@ -237,8 +236,8 @@ class ModelVAE(torch.nn.Module):
         mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
         sigma_square = torch.cat(
             (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)
-        library_size=library_size.repeat(n)
-        library_size=library_size.transpose(0,1).flatten(0,1)
+        library_size = library_size.repeat((n, 1))
+        library_size = library_size.transpose(0, 1).flatten(0, 1)
         mu_ = mu * library_size[:, None]
         sigma_square_ = sigma_square
         # End of copied from forward()

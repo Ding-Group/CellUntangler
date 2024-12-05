@@ -223,17 +223,6 @@ class EuclideanComponent(Component):
     def true_dim(self) -> int:
         return self.dim
 
-    def init_layers(self, in_dim: int, scalar_parametrization: bool) -> None:
-        self.manifold = self.create_manifold()
-        self.sampling_procedure = self._sampling_procedure_type(self.manifold, scalar_parametrization, in_dim)
-
-        self.fc_mean = torch.nn.Linear(in_dim, self.mean_dim)
-
-        if scalar_parametrization:
-            self.fc_logvar = torch.nn.Linear(in_dim, 1)
-        else:
-            self.fc_logvar = torch.nn.Linear(in_dim, self.true_dim)
-
 class ConstantComponent(Component):
 
     def __init__(self,
@@ -252,6 +241,16 @@ class ConstantComponent(Component):
     def true_dim(self) -> int:
         return self.dim
 
+    def init_layers(self, in_dim: int, scalar_parametrization: bool) -> None:
+        self.manifold = self.create_manifold()
+        self.sampling_procedure = self._sampling_procedure_type(self.manifold, scalar_parametrization, in_dim)
+
+        self.fc_mean = torch.nn.Linear(in_dim, self.mean_dim)
+
+        if scalar_parametrization:
+            self.fc_logvar = torch.nn.Linear(in_dim, 1)
+        else:
+            self.fc_logvar = torch.nn.Linear(in_dim, self.true_dim)
 
 class UniversalComponent(Component):
 

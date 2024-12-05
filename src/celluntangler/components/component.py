@@ -223,35 +223,6 @@ class EuclideanComponent(Component):
     def true_dim(self) -> int:
         return self.dim
 
-class ConstantComponent(Component):
-
-    def __init__(self,
-                 dim: int,
-                 fixed_curvature: bool,
-                 sampling_procedure: Type[SamplingProcedure[Q, P]],
-                 const: Optional[Tensor] = None,
-                 eps: Optional[Tensor] = None) -> None:
-        # Constant component always has fixed curvature.
-        super().__init__(dim, fixed_curvature=False, sampling_procedure=sampling_procedure)
-
-    def create_manifold(self) -> Manifold:
-        return Euclidean()
-
-    @property
-    def true_dim(self) -> int:
-        return self.dim
-
-    def init_layers(self, in_dim: int, scalar_parametrization: bool) -> None:
-        self.manifold = self.create_manifold()
-        self.sampling_procedure = self._sampling_procedure_type(self.manifold, scalar_parametrization, self.true_dim)
-
-        self.fc_mean = torch.nn.Linear(in_dim, self.mean_dim)
-
-        if scalar_parametrization:
-            self.fc_logvar = torch.nn.Linear(in_dim, 1)
-        else:
-            self.fc_logvar = torch.nn.Linear(in_dim, self.true_dim)
-
 class UniversalComponent(Component):
 
     def __init__(self,

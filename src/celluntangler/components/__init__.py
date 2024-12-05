@@ -14,7 +14,7 @@
 # ==============================================================================
 
 from .component import Component
-from .component import EuclideanComponent, ConstantComponent
+from .component import EuclideanComponent
 from .component import HyperbolicComponent, PoincareComponent
 from .component import SphericalComponent, StereographicallyProjectedSphereComponent
 from .component import UniversalComponent
@@ -25,7 +25,6 @@ __all__ = [
     "EuclideanComponent",
     "SphericalComponent",
     "HyperbolicComponent",
-    "ConstantComponent",
     "PoincareComponent",
     "UniversalComponent",
     "StereographicallyProjectedSphereComponent",

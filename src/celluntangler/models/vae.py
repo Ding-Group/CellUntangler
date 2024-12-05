@@ -206,21 +206,12 @@ class ModelVAE(torch.nn.Module):
         zs = []
 
         x1 = torch.log1p(x)
-        if self.total_num_of_batches != 0:
-            if len(self.n_batch) > 1:
-                self.batch = self.multi_one_hot(batch, self.n_batch)
-            else:
-                if self.n_batch[0] == 1 and self.zero_batch:
-                    self.batch = self.batch - 1
-                else:
-                    self.batch = nn.functional.one_hot(batch[:, 0], self.n_batch[0])
+        if len(self.n_batch) > 1:
+            self.batch = self.multi_one_hot(batch, self.n_batch)
         else:
-            self.batch = None
-        # print('self.batch:',self.batch)
+            self.batch = nn.functional_one_hot(batch[:, 0], self.n_batch[0])
         for i, component in enumerate(self.components):
             x_mask = x1 * self.mask[i]
-            # if i < 1:
-                # x_mask = torch.nn.functional.normalize(x_mask, p=2, dim=0)
             x_encoded = self.encode(x_mask, self.batch)
 
             q_z, p_z, z_params = component(x_encoded)
@@ -228,38 +219,27 @@ class ModelVAE(torch.nn.Module):
             # Numerically more stable.
             z, log_q_z_x_, log_p_z_ = component.sampling_procedure.rsample_log_probs(sample_shape, q_z, p_z)
 
-            if self.use_relu:
-                if 0 == i:
-                    z = torch.cat((torch.relu(z[..., 0:1]), z[..., 1:]), dim=1)
-
             zs.append(z)
 
             log_p_z += log_p_z_
             log_q_z_x += log_q_z_x_
 
         concat_z = torch.cat(zs, dim=-1)
-        mu_, sigma_square_ = self.decode(concat_z, self.batch)
-        mu_ = mu_ * library_size[:, None]
         # Copied from forward() below
-        # mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
-        # mu1 = mu1[:, :self.num_gene[0]]
-        # sigma_square1 = sigma_square1[:self.num_gene[0]]
+        mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
+        mu1 = mu1[:, :self.num_gene[0]]
+        sigma_square1 = sigma_square1[:self.num_gene[0]]
 
-        # print("Using new_reparametrized and new_concat_z")
-        # new_reparametrized = [self.compute_r2(x)] + reparametrized[1:]        
-        # new_concat_z = torch.cat(tuple(x.z for x in new_reparametrized), dim=-1)
+        mu, sigma_square = self.decode(concat_z, self.batch)
+        mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
+        sigma_square = torch.cat(
+            (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)
+        mu_ = mu * library_size[:, None]
+        sigma_square_ = sigma_square
+        # End of copied from forward()
 
-        # mu, sigma_square = self.decode(concat_z, self.batch)
-        # mu, sigma_square = self.decode(new_concat_z)
-        # mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
-        # sigma_square = torch.cat(
-            # (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)
-        # mu_ = mu * library_size[:, None]
-        # sigma_square_ = sigma_square
-        print('x.shape:',x.shape)
         x_orig = x.repeat((n, 1, 1))
 
-        # log_p_x_z = -self.reconstruction_loss(mu_, x_orig).sum(dim=-1)
         log_p_x_z = self.log_likelihood_nb(x_orig, mu_, sigma_square_)
 
         assert log_p_x_z.shape == log_p_z.shape

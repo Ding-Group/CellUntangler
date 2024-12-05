@@ -7,19 +7,21 @@ def get_config():
     config.device = "cpu"
 
     # Hyperparameters for dataset
+    # The batch size to use when training the model
     config.batch_size = 128
     
     # Hyperparameters for model
     # True to use a single parameter for the covariance matrix, False otherwise
     config.scalar_parametrization = False
     # If the dataset has no batches, 1 or [1]
-    # Otherwise, it should be a list of integers , one integer for each batch
+    # Otherwise, it should be a list of integers, one integer for each batch
     # The integer inidicates how many of each batch there are
     # E.g., [3, 12] means there are two batches, one with 3 labels and one with 12 labels
     config.n_batch = [1]
+    # True to not pass the batch to the encoder, False otherwise
     config.batch_invariant = True
     # The initialization for the model weights
-    # May be default in which case conasefig.init=init
+    # May be default initialization in which case config.init = None
     # Alternatively, it may be "normal", "xavier_uniform", "xavier_normal",
     # "he_uniform", "custom", or "custom_xavier_normal"
     # We use config.init = "custom" when trying to capture the cell cycle

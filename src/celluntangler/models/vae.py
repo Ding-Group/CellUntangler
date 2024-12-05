@@ -209,7 +209,7 @@ class ModelVAE(torch.nn.Module):
         if len(self.n_batch) > 1:
             self.batch = self.multi_one_hot(batch, self.n_batch)
         else:
-            self.batch = nn.functional_one_hot(batch[:, 0], self.n_batch[0])
+            self.batch = nn.functional.one_hot(batch[:, 0], self.n_batch[0])
         for i, component in enumerate(self.components):
             x_mask = x1 * self.mask[i]
             x_encoded = self.encode(x_mask, self.batch)

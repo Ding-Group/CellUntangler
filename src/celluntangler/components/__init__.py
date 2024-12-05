@@ -18,6 +18,7 @@ from .component import EuclideanComponent, ConstantComponent
 from .component import HyperbolicComponent, PoincareComponent
 from .component import SphericalComponent, StereographicallyProjectedSphereComponent
 from .component import UniversalComponent
+from .component import RotatedHyperbolicComponent
 
 __all__ = [
     "Component",
@@ -28,4 +29,5 @@ __all__ = [
     "PoincareComponent",
     "UniversalComponent",
     "StereographicallyProjectedSphereComponent",
+    "RotatedHyperbolicComponent",
 ]

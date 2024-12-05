@@ -18,8 +18,9 @@ from .wrapped_normal import WrappedNormal
 from .von_mises_fisher import RadiusVonMisesFisher, RadiusProjectedVonMisesFisher
 from .wrapped_distributions import EuclideanUniform, EuclideanNormal
 from .riemannian_normal import RiemannianNormal
+from .rotated_wrapped_normal import RotatedWrappedNormal
 
 __all__ = [
     "RadiusVonMisesFisher", "HypersphericalUniform", "WrappedNormal", "EuclideanUniform", "EuclideanNormal",
-    "RiemannianNormal", "RadiusProjectedVonMisesFisher"
+    "RiemannianNormal", "RadiusProjectedVonMisesFisher", "RotatedWrappedNormal"
 ]

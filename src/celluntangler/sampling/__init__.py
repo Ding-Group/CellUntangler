@@ -16,8 +16,10 @@
 from .sampling_procedures import SamplingProcedure, SphericalVmfProcedure, WrappedNormalProcedure
 from .sampling_procedures import EuclideanConstantProcedure, EuclideanNormalProcedure, RiemannianNormalProcedure
 from .sampling_procedures import ProjectedSphericalVmfProcedure, UniversalSamplingProcedure
+from .sampling_procedures import RotatedWrappedNormalProcedure
 
 __all__ = [
     "SamplingProcedure", "EuclideanConstantProcedure", "EuclideanNormalProcedure", "RiemannianNormalProcedure",
-    "SphericalVmfProcedure", "WrappedNormalProcedure", "ProjectedSphericalVmfProcedure", "UniversalSamplingProcedure"
+    "SphericalVmfProcedure", "WrappedNormalProcedure", "ProjectedSphericalVmfProcedure", "UniversalSamplingProcedure",
+    "RotatedWrappedNormalProcedure"
 ]

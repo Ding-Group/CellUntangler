@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# NOTICE: This file has been edited from its original form.
 # ==============================================================================
 
 from typing import Any, Tuple
@@ -99,7 +101,7 @@ def poincare_distance_c(x: Tensor, y: Tensor, c: Tensor, keepdim: bool = True, *
 
     sqrt_c = sqrt(c)
     # mob = pm.mobius_add(-x, y, c=c, dim=-1).norm(dim=-1, p=2, keepdim=keepdim)
-    mob = pm.mobius_add(-x, y, k=c, dim=-1).norm(dim=-1, p=2, keepdim=keepdim)
+    mob = pm.mobius_add(-x, y, k=-c, dim=-1).norm(dim=-1, p=2, keepdim=keepdim)
     arg = sqrt_c * mob
     dist_c = atanh(arg)
     res = dist_c * 2 / sqrt_c
@@ -116,14 +118,13 @@ def mu_0(shape: Tuple[int, ...], **kwargs: Any) -> Tensor:
 
 
 def parallel_transport_mu0(x: Tensor, dst: Tensor, radius: Tensor) -> Tensor:
-    print(radius)
     # return pm.parallel_transport0(dst, x, c=_c(radius))
-    return pm.parallel_transport0(dst, x, k=_c(radius))
+    return pm.parallel_transport0(dst, x, k=-_c(radius))
 
 
 def inverse_parallel_transport_mu0(x: Tensor, src: Tensor, radius: Tensor) -> Tensor:
     # return pm.parallel_transport0back(src, x, c=_c(radius))
-    return pm.parallel_transport0back(src, x, k=_c(radius))
+    return pm.parallel_transport0back(src, x, k=-_c(radius))
 
 
 def exp_map(x: Tensor, at_point: Tensor, radius: Tensor) -> Tensor:
@@ -132,7 +133,7 @@ def exp_map(x: Tensor, at_point: Tensor, radius: Tensor) -> Tensor:
 
 def exp_map_c(x: Tensor, at_point: Tensor, c: Tensor) -> Tensor:
     # return pm.expmap(at_point, x, c=c)
-    return pm.expmap(at_point, x, k=c)
+    return pm.expmap(at_point, x, k=-c)
 
 def exp_map_mu0(x: Tensor, radius: Tensor) -> Tensor:
     return exp_map_mu0_c(x, c=_c(radius))
@@ -140,7 +141,7 @@ def exp_map_mu0(x: Tensor, radius: Tensor) -> Tensor:
 
 def exp_map_mu0_c(x: Tensor, c: Tensor) -> Tensor:
     # return pm.expmap0(x, c=c)
-    return pm.expmap0(x, k=c)
+    return pm.expmap0(x, k=-c)
 
 
 def inverse_exp_map(x: Tensor, at_point: Tensor, radius: Tensor) -> Tensor:
@@ -149,18 +150,18 @@ def inverse_exp_map(x: Tensor, at_point: Tensor, radius: Tensor) -> Tensor:
 
 def inverse_exp_map_c(x: Tensor, at_point: Tensor, c: Tensor) -> Tensor:
     # return pm.logmap(at_point, x, c=c)
-    return pm.logmap(at_point, x, k=c)
+    return pm.logmap(at_point, x, k=-c)
 
 
 def inverse_exp_map_mu0(x: Tensor, radius: Tensor) -> Tensor:
     # return pm.logmap0(x, c=_c(radius))
-    return pm.logmap0(x, k=_c(radius))
+    return pm.logmap0(x, k=-_c(radius))
 
 
 def sample_projection_mu0(x: Tensor, at_point: Tensor, radius: Tensor) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
     c = _c(radius)
     # v_ = x / pm.lambda_x(at_point, c=c, dim=-1, keepdim=True)  # Corresponds to PT divided by 2.
-    v_ = x / pm.lambda_x(at_point, k=c, dim=-1, keepdim=True)
+    v_ = x / pm.lambda_x(at_point, k=-c, dim=-1, keepdim=True)
     x_proj = exp_map(v_, at_point=at_point, radius=radius)
     # x_proj2 = pm.project(x_proj, c=c)
     return x_proj, (v_, x)
@@ -170,7 +171,7 @@ def inverse_sample_projection_mu0(x_proj: Tensor, at_point: Tensor, radius: Tens
     c = _c(radius)
     v_ = inverse_exp_map_c(x_proj, at_point=at_point, c=c)
     # x = v_ * pm.lambda_x(at_point, c=c, dim=-1, keepdim=True)  # Corresponds to PT multiplied by 2.
-    x = v_ * pm.lambda_x(at_point, k=c, dim=-1, keepdim=True)
+    x = v_ * pm.lambda_x(at_point, k=-c, dim=-1, keepdim=True)
     return v_, x
 
 
@@ -189,4 +190,4 @@ def exp_map_x_polar(x: Tensor, radius: Tensor, v: Tensor, c: Tensor) -> Tensor:
     second_term = (torch.tanh(c.sqrt() * radius / 2) / (c.sqrt() * norm_v)) * v
     assert x.shape == second_term.shape
     # return pm.mobius_add(x, second_term, c=c)
-    return pm.mobius_add(x, second_term, k=c)
+    return pm.mobius_add(x, second_term, k=-c)

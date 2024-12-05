@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# NOTICE: This file has been edited from its original form.
 # ==============================================================================
 
 from typing import Any, Tuple
@@ -112,7 +114,7 @@ def mob_add(x: Tensor, y: Tensor, K: Tensor) -> Tensor:
     # return ((1 - 2 * K * prod - K * normy2) * x + (1 + K * normx2) * y) / denom.clamp(min=MIN_NORM)
     # Line below not originally commented out
     # return pm.mobius_add(x, y, c=-K)
-    return pm.mobius_add(x, y, k=-K)
+    return pm.mobius_add(x, y, k=K)
 
 
 def _c(radius: Tensor) -> Tensor:
@@ -138,7 +140,7 @@ def gyration(u: Tensor, v: Tensor, w: Tensor, c: Tensor) -> Tensor:
     # return mob_add(mupv, upvpw, c)
     # Line below not originally commented out
     # return pm.gyration(u, v, w, c=-c)
-    return pm.gyration(u, v, w, c=-c)
+    return pm.gyration(u, v, w, c=c)
 
 
 def parallel_transport_mu0(x: Tensor, dst: Tensor, radius: Tensor) -> Tensor:

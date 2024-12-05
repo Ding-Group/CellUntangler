@@ -243,7 +243,7 @@ class ConstantComponent(Component):
 
     def init_layers(self, in_dim: int, scalar_parametrization: bool) -> None:
         self.manifold = self.create_manifold()
-        self.sampling_procedure = self._sampling_procedure_type(self.manifold, scalar_parametrization, in_dim)
+        self.sampling_procedure = self._sampling_procedure_type(self.manifold, scalar_parametrization, self.true_dim)
 
         self.fc_mean = torch.nn.Linear(in_dim, self.mean_dim)
 

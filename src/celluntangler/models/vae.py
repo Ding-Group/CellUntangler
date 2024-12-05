@@ -225,6 +225,9 @@ class ModelVAE(torch.nn.Module):
             log_q_z_x += log_q_z_x_
 
         concat_z = torch.cat(zs, dim=-1)
+        concat_z = concat_z.transpose(0, 1).flatten(0, 1)
+        self.batch = self.batch.repeat((n,1,1))
+        self.batch = self.batch.transpose(0, 1).flatten(0, 1)
         # Copied from forward() below
         mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
         mu1 = mu1[:, :self.num_gene[0]]
@@ -234,10 +237,13 @@ class ModelVAE(torch.nn.Module):
         mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
         sigma_square = torch.cat(
             (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)
+        library_size=library_size.repeat(n)
+        library_size=library_size.transpose(0,1).flatten(0,1)
         mu_ = mu * library_size[:, None]
         sigma_square_ = sigma_square
         # End of copied from forward()
 
+        mu_ = mu_.reshape((batch_size, n, x.shape[-1])).transpose(0, 1)
         x_orig = x.repeat((n, 1, 1))
 
         log_p_x_z = self.log_likelihood_nb(x_orig, mu_, sigma_square_)
@@ -251,6 +257,7 @@ class ModelVAE(torch.nn.Module):
         assert log_q_z_x.shape == log_p_z.shape
         mi = (log_q_z_x - log_p_z).logsumexp(dim=0) - np.log(n)
 
+        concat_z = concat_z.reshape((batch_size, n, concat_z.shape[-1])).transpose(0, 1)
         mean_z = torch.mean(concat_z, dim=1, keepdim=True)
         mean_x = torch.mean(x_orig, dim=1, keepdim=True)
         cov_norm = torch.bmm((x - mean_x).transpose(1, 2), concat_z - mean_z).mean(dim=0).norm()

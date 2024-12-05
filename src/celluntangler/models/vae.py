@@ -294,7 +294,7 @@ class ModelVAE(torch.nn.Module):
         return BatchStats(bce, component_kl, beta, log_likelihood, mi, cov_norm)
     
     def train_step(self, optimizer: torch.optim.Optimizer, x_mb: Tensor, y_mb: Tensor,
-                   beta: float, epoch_num: int = None) -> Tuple[BatchStatsFloat, Outputs]:
+                   beta: float, epoch_num: int = None, likelihood_n: int = 500) -> Tuple[BatchStatsFloat, Outputs]:
         optimizer.zero_grad()
 
         library_size = torch.sum(x_mb, dim=1)
@@ -307,7 +307,7 @@ class ModelVAE(torch.nn.Module):
 
         assert x_mb_.shape == x_mb.shape
         batch_stats = self.compute_batch_stats(x_mb, x_mb_, y_mb, sigma_square_,
-                                               reparametrized, likelihood_n=0, beta=beta)
+                                               reparametrized, likelihood_n=likelihood_n, beta=beta)
 
         loss = -batch_stats.elbo  # Maximize elbo instead of minimizing it.
         assert torch.isfinite(loss).all()

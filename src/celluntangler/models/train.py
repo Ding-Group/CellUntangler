@@ -84,7 +84,7 @@ class Trainer:
         
         for _ in range(max_epochs):
             beta = self.get_beta(betas)
-            train_results[self.epoch] = self._train_epoch(optimizer, train_data, beta=beta)
+            train_results[self.epoch] = self._train_epoch(optimizer, train_data, beta=beta, likelihood_n=likelihood_n)
             self.epoch += 1
             
             if visualize_information:
@@ -99,13 +99,13 @@ class Trainer:
                     np.savetxt(os.path.join(embeddings_save_path, f'{model_name}_all_encode_v63_epoch_{count}_z_params.txt'), bb)
             count = count + 1
 
-    def _train_epoch(self, optimizer: torch.optim.Optimizer, train_data: DataLoader, beta: float) -> EpochStats:
+    def _train_epoch(self, optimizer: torch.optim.Optimizer, train_data: DataLoader, beta: float, likelihood_n: int = 500) -> EpochStats:
         print(f"\tTrainEpoch {self.epoch}:\t", end="")
         self.model.train()
 
         batch_stats = []
         for x_mb, y_mb in train_data:
-            stats, (reparametrized, _, _) = self.model.train_step(optimizer, x_mb, y_mb, beta=beta, epoch_num=self.epoch)
+            stats, (reparametrized, _, _) = self.model.train_step(optimizer, x_mb, y_mb, beta=beta, epoch_num=self.epoch, likelihood_n=likelihood_n)
 
             self.stats.global_step += 1
             batch_stats.append(stats)

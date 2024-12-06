@@ -53,6 +53,17 @@ When using one latent subspace, two latent subspaces but with a different model,
 `component_subspaces` is a dictionary where the keys are the indices of component $\mathbf{x}^j$, and the values are lists of indices of the subspace or subspaces $\mathbf{x}^l$ that should be used to reconstruct the component $\mathbf{x}^j$.
 Indexing starts from 0, so both $\mathbf{x}^1$ and $\mathbf{z}^1$ have index 0, $\mathbf{x}^2$ and $\mathbf{z}^2$ have index 1, and so on until $\mathbf{x}^k$ and $\mathbf{z}^k$, which have index $k-1$.
 
-*E.g.*, if we have the latent subspace `r2, e10`, we might specify `component_subspaces` as `{0: [0], 1: [0, 1]}` which means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ while both $\mathbf{z}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.
+*E.g.*, if we have the latent space `r2, e10`, we might specify `component_subspaces` as `{0: [0], 1: [0, 1]}` which means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ while both $\mathbf{z}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.
 Alternatively, `{0: [0], 1: [1]}` means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.
 For one latent subspace, `component_subspaces` should always be `{0: [0]}`.
+
+For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], \ldots, k-1: [k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{x}^2,\ldots,\mathbf{z}^k$.
+We may also specify multiple latent components for other $x^j$ besides $x^k$, such as `{0: [1], 1:[0, 1], \ldots, k-1: [0, 1, \ldots, k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
+Importantly, the dictionary should always contain the types $0, 1, \ldots, k-1$ unless more than one subspace $\mathbf{z}^j$ is used to capture the same component $\mathbf{x}^j$.
+In this case, two or more components $x^j$ will be repeated.
+The repeated component should only appear once in `component_subspaces`.
+This is the only instance in which an index for component $\mathbf{x}^j$ should be omitted.
+
+The subspaces for the same signal should follow after each other.
+*E.g.*, if we use `s2` and `e1` to captue the cell cycle and `e10` to capture non-cell cycle specific signals, the latent space should be specified as `s1, e1, e10` or `e1, s1, e10` not `s1, e10, e1`.
+The dictionary for this example would look like `{0: [0, 1], 2: [0, 1, 2]` or `{1: [0, 1], 2: [0, 1, 2]}`. As `s1` and `e1` are meant to capture the same signal, the cell cycle, we only list the index of either s1 or e1. We use both `s` and `e1` to reconstruct the component $x^j$ that should capture the cell cycle and `s1`, `e1`, and `e10` to reconstruct the component $\mathbf{x}^j$ which should capture the non-cell cycle specific signals.

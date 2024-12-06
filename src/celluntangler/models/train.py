@@ -67,7 +67,15 @@ class Trainer:
                        max_epochs: int = 1000,
                        visualize_information = None
                        ) -> Dict[int, EpochStats]:
-        
+        """
+        optimizer: The optimizer.
+        train_data: The data loader for loading the data.
+        betas: Weights to specify the strength of the KL-divergence. The same beta is used for each latent component.
+        likelihood_n: How many samples to use to perform Monte Carlo integration to compute the log-likelihood.
+        max_epochs: The number of epochs to train the model for.
+        visualize_information: None to save no intermediate embeddings when training. A dictionary if saving
+         the intermediate embeddings is desired.
+        """
         train_results = dict()
         test_results = dict()
 

@@ -27,6 +27,20 @@ def visualize_poincare_from_lorentz(embeddings,
                                     c_bar_label="",
                                     bbox_to_anchor=None,
                                     s=None):
+  """
+  Creates a plot of the visualization of the Poincare coordinates from the Lorentz coordinates.
+  embeddings: The Lorentz embeddings.
+  desired_obs_all: The obeservations to color the cells by.
+  embedding_type: "discrete" if the observations are discrete and "continuous" otherwise.
+  curvature: The curvature of the Lorentz mode.
+  cmap: The colormap to use if the observations are continuous.
+  grid_lines: True to show the values for the x-axis and y-axis. False otherwise.
+  origin: The origin of the Poincare disc.
+  cat_colors: A list of colors for each observation if the observations are discrete.
+  c_bar_label: The label of the color bar if the observations are continuous.
+  bbox_to_anchor: The coordinates of the legend.
+  s: The size of the points.
+  """
   poincare_coordinates = lorentz_to_poincare(embeddings, curvature)
   fig = visualize_poincare(poincare_coordinates, desired_obs_all, curvature, embedding_type, cmap, grid_lines, cat_colors=cat_colors, c_bar_label=c_bar_label, bbox_to_anchor=bbox_to_anchor, s=s)
   return fig
@@ -42,13 +56,15 @@ def visualize_poincare(poincare_coordinates,
                        c_bar_label="",
                        bbox_to_anchor=None,
                        s=None):
-
+  """
+  Visualization of the Poincare coordinates colored by a desired observation.
+  """
   x_p_1 = poincare_coordinates[:, 0]
   x_p_2 = poincare_coordinates[:, 1]
   circle = visualization.PoincareDisk(coords_type="ball")
-  print(round(curvature, 1))
+  # print(round(curvature, 1))
   circle = Circle(origin, radius=1/math.sqrt(abs(curvature)), color='black', fill=False)
-  print(round(1/math.sqrt(abs(curvature)),1))
+  # print(round(1/math.sqrt(abs(curvature)),1))
   # circle.set_origin((0.5, 0.4))
   fig, ax = plt.subplots(figsize=(8, 8))
   ax.axes.xaxis.set_visible(grid_lines)
@@ -97,10 +113,11 @@ def compute_umap(adata,
                   palette=None,
                   title=""):
   """
-  l_eighbors: The number of neighbors to use when creating the neighborhood map.
+  l_neighbors: The number of neighbors to use when creating the neighborhood map.
   n_pcs: Dimension to use when computing neighborhood map.
   color: A list of colors to display the UMAP in.
   embeddings_key: The key to use to get the embeddings to use to compute the neighborhood map.
+  use_original_umap: True to use the existing UMAP in the adata. False to compute it and use the computed UMAP.
   save_figure: True to save the figure. False otherwie.
   additional_save_information: A list of strings to include in the save name for the figure.
   palette: A palette specifying the color for the observition.
@@ -124,11 +141,22 @@ def compute_umap(adata,
 
 
 def plot_gene_change(ordered_adata, phase, gene_name, colors=None, labels=None, save_path=None, ccPhase_palette=None, layer=""):
+    """
+    Plots the gene expression for a single gene.
+    ordered_adata: The data with the cells ordered by pseudotime.
+    phase: The phase of the gene.
+    gene_name: The name of the gene.
+    colors: Colors for each cell.
+    labels: The label of the phase for each cell.
+    save_path: The path to save the plot to.
+    ccPhase_palette: A dictionary where the keys are the cell cycle phase and the values are the color for the cell cycle phase.
+    layer: The empty string to get the expression values from .X. Otherwise, a string that specifies which layer to use.
+    """
     if layer:
         gene_expression = ordered_adata[:, gene_name].layers[layer].squeeze(-1)
     else:
         gene_expression = ordered_adata[:, gene_name].X.squeeze(-1)
-    print(gene_expression)
+    # print(gene_expression)
     if labels is not None:
         categories = labels.cat.categories
 

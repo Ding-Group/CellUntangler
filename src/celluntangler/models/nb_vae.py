@@ -23,6 +23,16 @@ class NBVAE(ModelVAE):
                  config: ConfigDict,
                  component_subspaces=None,
                  component_no_grads=None) -> None:
+        """
+        h_dim: The last dimension of the encoder.
+        components: The parsed list of components, one component for each subspace.
+        mask: If there are k components, the mask will also have k components where the kth component in the mask
+          will be used to output the parameters of the posterior distribution for the kth latent component.
+        dataset: The dataset to train the model on.
+        config: A ConfigDict which specifies the hyperparameters of the model. The list is in get_config.py.
+        component_subspaces: Specifies which latent components to reconstruct the components with.
+        component_no_grads: A general parameter for specifying which latent components to stop the gradient for.
+        """
         super().__init__(h_dim,
                          components,
                          mask,

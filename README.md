@@ -73,4 +73,4 @@ Instead, to stop the gradient, the parameter `component_no_grads` must be specif
 It is a dictionary where the keys are subset of the keys of `component_subspaces`, specifically the indices of $\mathbf{x}^j$ for which one latent subspace or more $\mathbf{z}^j$, the gradient should be stopped when reconstructing $\mathbf{x}^j$.
 The values are the lists of indices for those latent subspaces for which to stop the gradient.
 *E.g.*, `{1: [0]}` means when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$.
-`{1:[0],2:[0,1]}` would mean when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$ and whn reconstructing $\mathbf{x}^3$, the gradient should be stopped for $\mathbf{z}^1$ and $\mathbf{z}^2$.
+`{1: [0],2: [0, 1]}` would mean when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$ and when reconstructing $\mathbf{x}^3$, the gradient should be stopped for $\mathbf{z}^1$ and $\mathbf{z}^2$.

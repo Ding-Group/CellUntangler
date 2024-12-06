@@ -41,10 +41,12 @@ To specifiy the dimension of the space, an integer is placed after the letter. *
 
 The different subspaces are separated by `,` or `, `. *E.g.*, `r2,e10` or `r2, e10` denotes a latent space with two subspaces where the first subspace is the hyperbolic space with the RoWN and a dimension of 2 and the second subspace is the Euclidean subspace with a dimension of 10.
 
+### Examples
 In the `CellUntangler` directory, we provide specific examples of using CellUntangler. These examples separate the cell cycle signals into one latent subspace from the non-cell cycle specific signals in another subspace.
 We discuss the case of using one subspace or more than two subspaces below.
 
-Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decopmose $\mathbf{x}$ into $k$ components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
+### Beyond the examples
+Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decompose $\mathbf{x}$ into $k$ components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
 Each component $\mathbf{x}^j$ is used to output the parameters of the posterior distribution $p(\mathbf{x}^j\mid\mathbf{z}^j)$.
 
 Importantly, CellUntangler has two parameters, `component_subspaces` and `component_no_grads`, which are `None` by default. These are the settings in the examples.

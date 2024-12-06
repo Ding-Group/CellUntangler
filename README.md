@@ -58,7 +58,7 @@ Alternatively, `{0: [0], 1: [1]}` means $\mathbf{z}^1$ should be used to reconst
 For one latent subspace, `component_subspaces` should always be `{0: [0]}`.
 
 For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], ..., k-1: [k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k$.
-We may also specify multiple latent components for other $x^j$ besides $z^k$, such as `{0: [1], 1:[0, 1], $\ldots$, k-1: [0, 1, ..., k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
+We may also specify multiple latent components for other $x^j$ besides $z^k$, such as `{0: [1], 1:[0, 1], ..., k-1: [0, 1, ..., k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
 Importantly, the dictionary should always contain the keys $0, 1, ..., k-1$ unless more than one subspace $\mathbf{z}^j$ is used to capture the same component $\mathbf{x}^j$.
 In this case, two or more components $x^j$ will be repeated.
 The repeated component should only appear once in `component_subspaces`.
@@ -74,3 +74,16 @@ It is a dictionary where the keys are subset of the keys of `component_subspaces
 The values are the lists of indices for those latent subspaces for which to stop the gradient.
 *E.g.*, `{1: [0]}` means when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$.
 `{1: [0],2: [0, 1]}` would mean when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$ and when reconstructing $\mathbf{x}^3$, the gradient should be stopped for $\mathbf{z}^1$ and $\mathbf{z}^2$.
+
+### Recommendations
+One latent subspace
+`componet_subspaces={0: [0]}` and `component_no_grads=None`.
+
+Two latent spaces
+We recommend setting `component_subspaces=None` and `component_no_grads=None`.
+
+More than two latent subspaces
+We recommend using a one-to-one correspondence where `j: [j]` or if multiple subspaces are being used for the same component $\mathbf{x}^j$, `[j]` becomes the list of subspace indices for that component.
+We recommend doing this for components $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^{k-1}$.
+For component $\mathbf{x}^j$, we recommend using all subspaces to reconstruct $\mathbf{x}^k$, so it will look like `k-1: [0, 1, ..., k-1]`.
+This is with the idea that each latent subspace $\mathbf{z}^j$ will capture a desired signal except for $\mathbf{z}^k$ which will capture all the remaining non-desired signals.

@@ -64,13 +64,13 @@ We may also specify multiple latent components for other $x^j$ besides $z^k$, su
 Importantly, the dictionary should always contain the keys $0, 1, ..., k-1$ unless a component $\mathbf{x}^j$ is repeated.
 The repeated component should only appear once in `component_subspaces`.
 This is the only instance in which an index for component $\mathbf{x}^j$ should be omitted.
-The value would be a list on indices for the latent subspaces which have the same repeated component $x^{j}$.
+The value would be a list of indices for the latent subspaces which have the same repeated component $x^{j}$.
 
 The subspaces for the same signal should follow after each other.
 *E.g.*, if we use `s2` and `e1` to captue the cell cycle and `e10` to capture non-cell cycle specific signals, the latent space should be specified as `s1, e1, e10` or `e1, s1, e10` not `s1, e10, e1`.
 The dictionary for this example would look like `{0: [0, 1], 2: [0, 1, 2]` or `{1: [0, 1], 2: [0, 1, 2]}`. As `s1` and `e1` are meant to capture the same signal, the cell cycle, we only list the index of either s1 or e1. We use both `s1` and `e1` to reconstruct the component $x^1$ that should capture the cell cycle and `s1`, `e1`, and `e10` to reconstruct the component $\mathbf{x}^2$ which should capture the non-cell cycle specific signals.
 
-When specifying `component_subspaces`, `config.use_z2_no_grad` is ignored to stop the gradient although `config.start-z2_no_grad` and `config.end_z2_no_grad` are still used to specify the epoch to start and end stopping the gradient.
+When specifying `component_subspaces`, `config.use_z2_no_grad` is ignored to stop the gradient although `config.start_z2_no_grad` and `config.end_z2_no_grad` are still used to specify the epoch to start and end stopping the gradient.
 Instead, to stop the gradient, the parameter `component_no_grads` must be specified.
 It is a dictionary where the keys are subset of the keys of `component_subspaces`, specifically the indices of $\mathbf{x}^j$ for which one latent subspace or more $\mathbf{z}^j$, the gradient should be stopped when reconstructing $\mathbf{x}^j$.
 The values are the lists of indices for those latent subspaces for which to stop the gradient.

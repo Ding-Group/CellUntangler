@@ -76,14 +76,14 @@ The values are the lists of indices for those latent subspaces for which to stop
 `{1: [0],2: [0, 1]}` would mean when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$ and when reconstructing $\mathbf{x}^3$, the gradient should be stopped for $\mathbf{z}^1$ and $\mathbf{z}^2$.
 
 ### Recommendations
-One latent subspace
+#### One latent subspace
 `componet_subspaces={0: [0]}` and `component_no_grads=None`.
 
-Two latent spaces
+#### Two latent spaces
 We recommend setting `component_subspaces=None` and `component_no_grads=None`.
 
-More than two latent subspaces
+#### More than two latent subspaces
 We recommend using a one-to-one correspondence where `j: [j]` or if multiple subspaces are being used for the same component $\mathbf{x}^j$, `[j]` becomes the list of subspace indices for that component.
 We recommend doing this for components $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^{k-1}$.
-For component $\mathbf{x}^j$, we recommend using all subspaces to reconstruct $\mathbf{x}^k$, so it will look like `k-1: [0, 1, ..., k-1]`.
+For component $\mathbf{x}^k$, we recommend using all subspaces to reconstruct $\mathbf{x}^k$, so it will look like `k-1: [0, 1, ..., k-1]`.
 This is with the idea that each latent subspace $\mathbf{z}^j$ will capture a desired signal except for $\mathbf{z}^k$ which will capture all the remaining non-desired signals.

@@ -52,7 +52,7 @@ Each component $\mathbf{x}^j$ is used to output the parameters of the posterior 
 Importantly, CellUntangler has two parameters, `component_subspaces` and `component_no_grads`, which are `None` by default. These are the settings in the examples.
 
 When using one latent subspace, two latent subspaces but with a different model, or more than two latent subspaces, `component_subspaces` must be specified.
-`component_subspaces` is a dictionary where the keys are the indices of component $\mathbf{x}^j$, and the values are lists of indices of the subspace or subspaces $\mathbf{x}^l$ that should be used to reconstruct the component $\mathbf{x}^j$.
+`component_subspaces` is a dictionary where the keys are the indices of component $\mathbf{x}^j$, and the values are lists of indices of the subspace or subspaces $\mathbf{z}^l$ that should be used to reconstruct the component $\mathbf{x}^j$.
 Indexing starts from 0, so both $\mathbf{x}^1$ and $\mathbf{z}^1$ have index 0, $\mathbf{x}^2$ and $\mathbf{z}^2$ have index 1, and so on until $\mathbf{x}^k$ and $\mathbf{z}^k$, which have index $k-1$.
 
 *E.g.*, if we have the latent space `r2, e10`, we might specify `component_subspaces` as `{0: [0], 1: [0, 1]}` which means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ while both $\mathbf{z}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.

@@ -61,10 +61,10 @@ For one latent subspace, `component_subspaces` should always be `{0: [0]}`.
 
 For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], ..., k-1: [k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k$.
 We may also specify multiple latent components for other $x^j$ besides $z^k$, such as `{0: [1], 1:[0, 1], ..., k-1: [0, 1, ..., k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
-Importantly, the dictionary should always contain the keys $0, 1, ..., k-1$ unless more than one subspace $\mathbf{z}^j$ is used to capture the same component $\mathbf{x}^j$.
-In this case, two or more components $x^j$ will be repeated.
+Importantly, the dictionary should always contain the keys $0, 1, ..., k-1$ unless a component $\mathbf{x}^j$ is repeated.
 The repeated component should only appear once in `component_subspaces`.
 This is the only instance in which an index for component $\mathbf{x}^j$ should be omitted.
+The value would be a list on indices for the latent subspaces which have the same repeated component $x^{j}$.
 
 The subspaces for the same signal should follow after each other.
 *E.g.*, if we use `s2` and `e1` to captue the cell cycle and `e10` to capture non-cell cycle specific signals, the latent space should be specified as `s1, e1, e10` or `e1, s1, e10` not `s1, e10, e1`.

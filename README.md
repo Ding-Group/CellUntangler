@@ -16,7 +16,7 @@ Install Python 3.10+.
 ## Structure
 
 * `src/` - Source folder.
-  * `data/` - Data loading, preprocessing and batching.
+  * `data/` - Data loading.
   * `celluntangler/` - Model directory. Note that models heavily use inheritance!
   * `visualization/` - Utilities for visualization of latent spaces.
 * `README.md` - This manual.

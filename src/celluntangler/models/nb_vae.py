@@ -21,13 +21,15 @@ class NBVAE(ModelVAE):
                  mask,
                  dataset: VaeDataset,
                  config: ConfigDict,
-                 first_signal_components: Optional[List[bool]] = None) -> None:
+                 component_subspaces=None,
+                 component_no_grads=None) -> None:
         super().__init__(h_dim,
                          components,
                          mask,
                          dataset,
                          config,
-                         first_signal_components)
+                         component_subspaces,
+                         component_no_grads)
 
         self.in_dim = dataset.in_dim
         self.h_dim = h_dim

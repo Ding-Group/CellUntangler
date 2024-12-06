@@ -59,7 +59,8 @@ class ModelVAE(torch.nn.Module):
                  mask,
                  dataset: VaeDataset,
                  config: ConfigDict,
-                 first_signal_components: Optional[List[bool]] = None) -> None:
+                 component_subspaces=None,
+                 component_no_grads=None) -> None:
         """
         ModelVAE initializer
         :param h_dim: dimension of the hidden layers
@@ -84,16 +85,25 @@ class ModelVAE(torch.nn.Module):
         dim_z = sum(dim_all)
         
         mask_z = np.zeros(dim_z)
-        if first_signal_components is None:
+        if component_subspaces is None:
             mask_z[:dim_all[0]] = 1
             self.mask_z = torch.tensor(mask_z)
         else:
-            start = 0
-            for i in range(0, len(first_signal_components)):
-                if first_signal_components[i]:
-                    mask_z[start:start+dim_all[i]] = 1
-                start = start + dim_all[i]
-        self.mask_z = torch.tensor(mask_z)
+            self.z_masks=[]
+            mask_start=0
+            for i in range(0, len(self.mask)):
+                if i in component_subspaces:
+                    z_mask = np.zeros(dim_z)
+                    mask_start = 0
+                    for j in range (0, len(components)):
+                        if j in component_subspaces[i]:
+                            z_mask[mask_start:mask_start+components[j].dim]=1
+                        mask_start = mask_start + components[j].dim
+                    self.z_masks.append(torch.tensor(z_mask))
+                else:
+                    self.z_masks.append(None)
+        self.component_subspaces = component_subspaces
+        self.component_no_grads = component_no_grads
 
         self.activation = config.activation
         
@@ -164,28 +174,62 @@ class ModelVAE(torch.nn.Module):
 
         concat_z = torch.cat(tuple(x.z for x in reparametrized), dim=-1)
         
-        mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
-        mu1 = mu1[:, :self.num_gene[0]]
-        sigma_square1 = sigma_square1[:self.num_gene[0]]
+        if self.component_subspaces is None:
+            mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
+            mu1 = mu1[:, :self.num_gene[0]]
+            sigma_square1 = sigma_square1[:self.num_gene[0]]
 
-        if self.config.use_z2_no_grad:
-            if epoch_num is not None:
-                if epoch_num >= self.config.start_z2_no_grad and epoch_num <= self.config.end_z2_no_grad:
-                    concat_z = self.create_concat_z(reparametrized[0].z, reparametrized[1].z)
+            if self.config.use_z2_no_grad:
+                if epoch_num is not None:
+                    if epoch_num >= self.config.start_z2_no_grad and epoch_num <= self.config.end_z2_no_grad:
+                        concat_z = self.create_concat_z(reparametrized[0].z, reparametrized[1].z)
         
-        mu, sigma_square = self.decode(concat_z, self.batch)
-        mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
-        sigma_square = torch.cat(
+            mu, sigma_square = self.decode(concat_z, self.batch)
+            mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
+            sigma_square = torch.cat(
             (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)
-        
+        else:
+            start = 0
+            mu = torch.tensor([])
+            sigma_square = torch.tensor([])
+            for i in range(0, len(self.mask)):
+                if i in self.component_subspaces:
+                    component_num_gene = self.num_gene[i]
+                    assert (start+component_num_gene) <= x.shape[-1]
+                    
+                    if self.component_no_grads is not None and i in self.component_no_grads:
+                        if epoch_num is not None:
+                            if epoch_num >= self.config.start_z2_no_grad and epoch_num <= self.config.end_z2_no_grad:
+                                concat_z = self.create_concat_z_general(reparametrized, self.component_no_grads[i])
+                    mu_component, sigma_square_component = self.decode(concat_z * self.z_masks[i], self.batch)
+                    
+                    mu_component = mu_component[:,start:start+component_num_gene]
+                    sigma_square_component = sigma_square_component[start:start+component_num_gene]
+                    
+                    mu = torch.cat((mu, mu_component), dim=-1)
+                    sigma_square = torch.cat((sigma_square, sigma_square_component), dim=-1)
+                    
+                    start = start + component_num_gene
+                    
         concat_z_params = torch.cat(tuple(z_params[0] for z_params in all_z_params), dim=-1)
 
-        return reparametrized, concat_z, mu, sigma_square, concat_z_params, mu1, sigma_square1
+        return reparametrized, concat_z, mu, sigma_square, concat_z_params
 
     def create_concat_z(self, z1, z2):
         z1_no_grad = z1.detach().clone()
         z1_no_grad.requires_grad = False
         concat_z = torch.cat((z1_no_grad, z2), dim=-1)
+        return concat_z
+    
+    def create_concat_z_general(self, reparametrized, reparametrized_no_grads):
+        concat_z = torch.tensor([])
+        for i in range(0, len(reparametrized)):
+            if i in reparametrized_no_grads:
+                z_no_grad = reparametrized[i].z.detach().clone()
+                z_no_grad.requires_grad = False
+                concat_z = torch.cat((concat_z, z_no_grad), dim=-1)
+            else:
+                concat_z = torch.cat((concat_z, reparametrized[i].z), dim=-1)
         return concat_z
 
     def log_likelihood(self, x: Tensor, batch: Tensor, n: int = 500) -> Tuple[Tensor, Tensor, Tensor]:
@@ -301,7 +345,7 @@ class ModelVAE(torch.nn.Module):
 
         x_mb = x_mb.to(self.device)
         y_mb = y_mb.to(self.device)
-        reparametrized, concat_z, x_mb_, sigma_square_, concat_z_params, _, _ = self(torch.log1p(x_mb), y_mb, epoch_num)
+        reparametrized, concat_z, x_mb_, sigma_square_, concat_z_params = self(torch.log1p(x_mb), y_mb, epoch_num)
 
         x_mb_ = x_mb_ * library_size[:, None]
 

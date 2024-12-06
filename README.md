@@ -80,10 +80,10 @@ The values are the lists of indices for those latent subspaces for which to stop
 
 ### Recommendations
 #### One latent subspace
-`componet_subspaces={0: [0]}` and `component_no_grads=None`.
+`componet_subspaces = {0: [0]}` and `component_no_grads = None`.
 
 #### Two latent spaces
-We recommend setting `component_subspaces=None` and `component_no_grads=None`.
+We recommend setting `component_subspaces = None` and `component_no_grads = None`.
 
 #### More than two latent subspaces
 We recommend using a one-to-one correspondence where `j: [j]` or if multiple subspaces are being used for the same component $\mathbf{x}^j$, `[j]` becomes the list of subspace indices for that component.

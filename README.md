@@ -57,9 +57,9 @@ Indexing starts from 0, so both $\mathbf{x}^1$ and $\mathbf{z}^1$ have index 0, 
 Alternatively, `{0: [0], 1: [1]}` means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.
 For one latent subspace, `component_subspaces` should always be `{0: [0]}`.
 
-For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], \ldots, k-1: [k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{x}^2,\ldots,\mathbf{z}^k$.
-We may also specify multiple latent components for other $x^j$ besides $x^k$, such as `{0: [1], 1:[0, 1], \ldots, k-1: [0, 1, \ldots, k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
-Importantly, the dictionary should always contain the types $0, 1, \ldots, k-1$ unless more than one subspace $\mathbf{z}^j$ is used to capture the same component $\mathbf{x}^j$.
+For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], $\ldots$, k-1: [k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k$.
+We may also specify multiple latent components for other $x^j$ besides $z^k$, such as `{0: [1], 1:[0, 1], $\ldots$, k-1: [0, 1, $\ldots$, k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
+Importantly, the dictionary should always contain the keys $0, 1, \ldots, k-1$ unless more than one subspace $\mathbf{z}^j$ is used to capture the same component $\mathbf{x}^j$.
 In this case, two or more components $x^j$ will be repeated.
 The repeated component should only appear once in `component_subspaces`.
 This is the only instance in which an index for component $\mathbf{x}^j$ should be omitted.

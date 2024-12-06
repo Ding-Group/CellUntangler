@@ -46,8 +46,8 @@ In the `CellUntangler` directory, we provide specific examples of using CellUnta
 We discuss the case of using one subspace or more than two subspaces below.
 
 ### Beyond the examples
-Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decompose $\mathbf{x}$ into $k$ components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
-Each component $\mathbf{x}^j$ is used to output the parameters of the posterior distribution $p(\mathbf{x}^j\mid\mathbf{z}^j)$.
+Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decompose the UMI count vector $\mathbf{x}$ into $k$ components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
+Each component $\mathbf{x}^j$ is used to output the parameters of the posterior distribution $p(\mathbf{z}^j\mid\mathbf{x}^j)$.
 
 Importantly, CellUntangler has two parameters, `component_subspaces` and `component_no_grads`, which are `None` by default. These are the settings in the examples.
 

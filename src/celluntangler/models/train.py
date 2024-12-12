@@ -123,8 +123,11 @@ class Trainer:
         for i, component in enumerate(self.model.components):
             name = f"{component.summary_name(i)}/curvature"
             epoch_dict[name] = float(component.manifold.curvature)
-            
-        print(epoch_dict, flush=True)
+        
+        rounded_epoch_dict = {}
+        for key in epoch_dict:
+            rounded_epoch_dict[key] = round(epoch_dict[key], 3)
+        print(rounded_epoch_dict, flush=True)
         self.epoch_train_results[self.epoch] = epoch_dict
         self.epoch_train_stats[self.epoch] = epoch_stats
 

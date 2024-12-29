@@ -15,6 +15,7 @@ Install Python 3.10+.
 
 ## Structure
 
+* `cell_cycle_genes` - Folder of cell cycle gene lists used for CellUntangler.
 * `src/` - Source folder.
   * `data/` - Data loading.
   * `celluntangler/` - Model directory. Note that models heavily use inheritance!

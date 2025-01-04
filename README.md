@@ -33,11 +33,8 @@ There are different subspaces available for the latent space in CellUntangler wh
 
 * Euclidean, specified as e
 * Spherical space, specified as s
-* Stereographically projected sphere, specified as d
 * Hyperbolic with the Lorentz model, specified as h
-* Poincare, specified as p
 * Hyperbolic with the Lorentz model and the rotated hyperbolic wrapped normal distribution (RoWN), specified as r
-* Universal, specified as u
 
 To specifiy the dimension of the space, an integer is placed after the letter. *E.g.*, `e2` denotes the Euclidean space with a dimension of 2.
 

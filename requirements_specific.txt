@@ -1,1 +1,12 @@
-
+anndata==0.11.1
+geomstats==2.8.0
+geoopt==0.5.0
+matplotlib==3.8.0
+ml_collections==0.1.0
+numpy
+pandas==2.2.2
+scanpy==1.10.4
+scikit-learn==1.5.2.
+scipy>=1.11.2
+torch==2.5.1
+torchvision==0.20.1

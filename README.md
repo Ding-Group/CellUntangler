@@ -11,7 +11,7 @@ This repository contains a PyTorch implementation of CellUntangler.
 Install Python 3.10+.
 
 1. Clone the repository using `!git clone https://github.com/Ding-Group/CellUntangler`.
-2. Install the dependencies found in `requirements.txt` with `pip install -r CellUntangler/requirements.txt` (or `pip install -r CellUntangler/requirements_specific.txt`) or if the working directory is CellUntangler, `pip install -r requirements.txt` or `pip install -r requirements_specific.txt`.
+2. Install the dependencies found in `requirements.txt` with `pip install -r CellUntangler/requirements.txt` (or `pip install -r CellUntangler/requirements_specific.txt`) or if the working directory is CellUntangler, `pip install -r requirements.txt` or (`pip install -r requirements_specific.txt`).
 
 ## Structure
 

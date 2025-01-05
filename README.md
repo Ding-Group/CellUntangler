@@ -11,7 +11,7 @@ This repository contains a PyTorch implementation of CellUntangler.
 Install Python 3.10+.
 
 1. Clone the repository using `!git clone https://github.com/Ding-Group/CellUntangler`.
-2. Install the dependencies found in `requirements.txt` with `pip install -r CellUntangler/requirements.txt` or if the working directory is CellUntangler, `pip install -r requirements.txt.`
+2. Install the dependencies found in `requirements.txt` with `pip install -r CellUntangler/requirements.txt` (or `pip install -r CellUntangler/requirements_specific.txt`) or if the working directory is CellUntangler, `pip install -r requirements.txt` or `pip install -r requirements_specific.txt`.
 
 ## Structure
 
@@ -23,6 +23,7 @@ Install Python 3.10+.
 * `README.md` - This manual.
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.
+* requirements_specific.txt` - More specific version of required Python packages.
 * `THIRD_PARTY.md` - List of third party software used.
 * `celluntangler_hela_tutorial.ipynb` - A tutorial for using CellUntangler on a dataset of HeLa cells.
 * `celluntangler_immune_cells_tutorial.ipynb` - A tutorial for using CellUntangler ona dataset of immune cells, both cycling and non-cycling.

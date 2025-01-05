@@ -23,7 +23,7 @@ Install Python 3.10+.
 * `README.md` - This manual.
 * `LICENSE` - Apache Standard License 2.0.
 * `requirements.txt` - Required Python packages.
-* requirements_specific.txt` - More specific version of required Python packages.
+* `requirements_specific.txt` - More specific version of required Python packages.
 * `THIRD_PARTY.md` - List of third party software used.
 * `celluntangler_hela_tutorial.ipynb` - A tutorial for using CellUntangler on a dataset of HeLa cells.
 * `celluntangler_immune_cells_tutorial.ipynb` - A tutorial for using CellUntangler ona dataset of immune cells, both cycling and non-cycling.

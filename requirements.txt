@@ -1,5 +1,4 @@
 anndata==0.11.1
-bokeh==3.6.1
 geomstats==2.8.0
 geoopt==0.5.0
 matplotlib==3.8.0

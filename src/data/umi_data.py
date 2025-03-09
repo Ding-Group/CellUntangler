@@ -63,7 +63,7 @@ class UMIVaeDataset(VaeDataset):
                           num_workers=0, pin_memory=True, shuffle=train,
                           generator=g)
 
-    def create_loaders(self, x, y, seed=None) -> Tuple[DataLoader, DataLoader]:
+    def create_loaders(self, x, y, train: bool = True, seed: Optional[int] = None) -> Tuple[DataLoader, DataLoader]:
         dataset = UmiDataset(x, y)
 
         train_loader = self._load_synth(dataset, train=True, seed=seed)

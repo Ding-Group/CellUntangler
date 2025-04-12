@@ -49,7 +49,7 @@ class NBVAE(ModelVAE):
             n_batch = [n_batch]
         self.n_batch = n_batch
         self.batch_invariant = config.batch_invariant
-
+        
         total_num_of_batches = sum(self.n_batch)
         self.total_num_of_batches = total_num_of_batches
         
@@ -131,10 +131,13 @@ class NBVAE(ModelVAE):
 
         return x.view(bs, -1)  # such that x is batch * dim, similar to reshape (no need)
 
-    def decode(self, concat_z: Tensor, batch: Tensor):
+    def decode(self, concat_z: Tensor, batch: Tensor, use_z_batch: bool = True):
         assert len(concat_z.shape) >= 2
         bs = concat_z.size(-2)
 
+        if not use_z_batch:
+            batch = torch.zeros(batch.shape)
+            print(batch)
         concat_z = torch.concat((concat_z, batch), dim=1)
         x = self.decoder(concat_z)
 

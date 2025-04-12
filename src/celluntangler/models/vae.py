@@ -77,7 +77,9 @@ class ModelVAE(torch.nn.Module):
             n_batch = [n_batch]
         self.n_batch = n_batch
         self.total_num_of_batches = sum(self.n_batch)
-        
+        self.use_z1_batch = config.use_z1_batch
+        self.use_z2_batch = config.use_z2_batch
+
         self.mask = mask
         self.num_gene = torch.sum(self.mask > 0, 1)
         
@@ -175,7 +177,7 @@ class ModelVAE(torch.nn.Module):
         concat_z = torch.cat(tuple(x.z for x in reparametrized), dim=-1)
         
         if self.component_subspaces is None:
-            mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch)
+            mu1, sigma_square1 = self.decode(concat_z * self.mask_z, self.batch, self.use_z1_batch)
             mu1 = mu1[:, :self.num_gene[0]]
             sigma_square1 = sigma_square1[:self.num_gene[0]]
 
@@ -184,7 +186,7 @@ class ModelVAE(torch.nn.Module):
                     if epoch_num >= self.config.start_z2_no_grad and epoch_num <= self.config.end_z2_no_grad:
                         concat_z = self.create_concat_z(reparametrized[0].z, reparametrized[1].z)
         
-            mu, sigma_square = self.decode(concat_z, self.batch)
+            mu, sigma_square = self.decode(concat_z, self.batch, self.use_z2_batch)
             mu = torch.cat((mu1, mu[:, self.num_gene[0]:]), dim=-1)
             sigma_square = torch.cat(
             (sigma_square1, sigma_square[self.num_gene[0]:]), dim=-1)

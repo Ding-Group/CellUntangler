@@ -20,6 +20,10 @@ def get_config():
     config.n_batch = [1]
     # True to not pass the batch to the encoder, False otherwise
     config.batch_invariant = True
+    # True to use the batch with z1, if False, batch set to 0s and not used
+    config.use_z1_batch = True
+    # True to use the batch with z2, if False, batch set to 0s and not used
+    config.use_z2_batch = True
     # The initialization for the model weights
     # May be default initialization in which case config.init = None
     # Alternatively, it may be "normal", "xavier_uniform", "xavier_normal",

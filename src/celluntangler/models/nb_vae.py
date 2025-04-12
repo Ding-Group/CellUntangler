@@ -137,7 +137,6 @@ class NBVAE(ModelVAE):
 
         if not use_z_batch:
             batch = torch.zeros(batch.shape)
-        print(batch)
         concat_z = torch.concat((concat_z, batch), dim=1)
         x = self.decoder(concat_z)
 

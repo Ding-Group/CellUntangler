@@ -128,8 +128,8 @@ class RotatedWrappedNormalProcedure(SamplingProcedure[RotatedWrappedNormal, Rota
         # std_0 = torch.ones_like(std, device=z_mean.device)
         # p_z = RotatedWrappedNormal(mu_0, std_0, manifold=self._manifold)
         # Alternative way to set prior
-        mu_0 = self._manifold.mu_0(torch.Size([1, z_mean.shape[-1]]))
-        std_0 = torch.ones(1, std.shape[-1])
+        mu_0 = self._manifold.mu_0(torch.Size([1, z_mean.shape[-1]]), device=z_mean.device)
+        std_0 = torch.ones(1, std.shape[-1], device=z_mean.device)
         p_z = RotatedWrappedNormal(mu_0, std_0, manifold=self._manifold)
         # print("mu_0.shape:", mu_0.shape)
         # print("std_0.shape:", std_0.shape)

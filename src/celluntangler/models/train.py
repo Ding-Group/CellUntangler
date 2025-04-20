@@ -63,10 +63,10 @@ class Trainer:
                        optimizer: Any,
                        train_data: DataLoader,
                        betas: Sequence[float],
+                       device: torch.device,
                        likelihood_n: int = 500,
                        max_epochs: int = 1000,
-                       visualize_information = None,
-                       device: torch.device = torch.device("cpu")
+                       visualize_information = None
                        ) -> Dict[int, EpochStats]:
         """
         optimizer: The optimizer.

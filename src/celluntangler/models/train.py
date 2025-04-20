@@ -84,11 +84,11 @@ class Trainer:
         if visualize_information:
             x = visualize_information["x"]
             y = visualize_information["y"]
-            a = self.model(torch.log1p(torch.tensor(x)), torch.tensor(y))
+            a = self.model(torch.log1p(torch.tensor(x),device=device), torch.tensor(y,device=device))
             b = a[4]
             embeddings_save_path = visualize_information["embeddings_save_path"]
             model_name = visualize_information["model_name"]
-            bb = b.detach().numpy()
+            bb = b.detach().to(torch.device("cpu")).numpy()
             np.savetxt(os.path.join(embeddings_save_path, f'{model_name}_all_encode_v63_initialization_z_params.txt'), bb)
         
         for _ in range(max_epochs):

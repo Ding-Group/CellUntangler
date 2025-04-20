@@ -55,7 +55,7 @@ class RotatedWrappedNormal(torch.distributions.Distribution, VaeDistribution):
         assert loc.shape[:-1] == scale.shape[:-1]
         assert tangent_dim == scale.shape[-1]
 
-        self.device = self.loc.device
+        self.device = loc.device
 
         # Create rotation matrix R
         target_axis = loc[..., 1:]

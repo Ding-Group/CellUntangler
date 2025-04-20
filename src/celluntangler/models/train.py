@@ -84,7 +84,7 @@ class Trainer:
         if visualize_information:
             x = visualize_information["x"]
             y = visualize_information["y"]
-            a = self.model(torch.log1p(torch.tensor(x),device=device), torch.tensor(y,device=device))
+            a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
             b = a[4]
             embeddings_save_path = visualize_information["embeddings_save_path"]
             model_name = visualize_information["model_name"]

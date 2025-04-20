@@ -67,7 +67,7 @@ class ModelVAE(torch.nn.Module):
         :param components: dimension of the latent representation (spherical, hyperbolic, euclidean)
         """
         super().__init__()
-        self.device = torch.device("cpu")
+        self.device = config.device
         self.components = nn.ModuleList(components)
 
         self.config = config
@@ -80,7 +80,7 @@ class ModelVAE(torch.nn.Module):
         self.use_z1_batch = config.use_z1_batch
         self.use_z2_batch = config.use_z2_batch
 
-        self.mask = mask
+        self.mask = mask.to(self.device)
         self.num_gene = torch.sum(self.mask > 0, 1)
         
         dim_all = [i.dim for i in self.components]
@@ -89,7 +89,7 @@ class ModelVAE(torch.nn.Module):
         mask_z = np.zeros(dim_z)
         if component_subspaces is None:
             mask_z[:dim_all[0]] = 1
-            self.mask_z = torch.tensor(mask_z)
+            self.mask_z = torch.tensor(mask_z,device=self.device)
         else:
             self.z_masks=[]
             mask_start=0
@@ -101,7 +101,7 @@ class ModelVAE(torch.nn.Module):
                         if j in component_subspaces[i]:
                             z_mask[mask_start:mask_start+components[j].dim]=1
                         mask_start = mask_start + components[j].dim
-                    self.z_masks.append(torch.tensor(z_mask))
+                    self.z_masks.append(torch.tensor(z_mask,device=self.device))
                 else:
                     self.z_masks.append(None)
         self.component_subspaces = component_subspaces

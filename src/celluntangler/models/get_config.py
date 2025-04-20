@@ -1,10 +1,11 @@
 import ml_collections
+import torch
 
 def get_config():
     config = ml_collections.ConfigDict()
 
     config.seed = None
-    config.device = "cpu"
+    config.device = torch.device("cpu")
 
     # Hyperparameters for dataset
     # The batch size to use when training the model

@@ -65,7 +65,8 @@ class Trainer:
                        betas: Sequence[float],
                        likelihood_n: int = 500,
                        max_epochs: int = 1000,
-                       visualize_information = None
+                       visualize_information = None,
+                       device: torch.device = torch.device("cpu")
                        ) -> Dict[int, EpochStats]:
         """
         optimizer: The optimizer.
@@ -99,11 +100,11 @@ class Trainer:
                 if count in visualize_information["epochs"]:
                     x = visualize_information["x"]
                     y = visualize_information["y"]
-                    a = self.model(torch.log1p(torch.tensor(x)), torch.tensor(y))
+                    a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
                     b = a[4]
                     embeddings_save_path = visualize_information["embeddings_save_path"]
                     model_name = visualize_information["model_name"]
-                    bb = b.detach().numpy()
+                    bb = b.detach().to("cpu").numpy()
                     np.savetxt(os.path.join(embeddings_save_path, f'{model_name}_all_encode_v63_epoch_{count}_z_params.txt'), bb)
             count = count + 1
 

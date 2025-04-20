@@ -244,7 +244,7 @@ class ModelVAE(torch.nn.Module):
         batch_size = x.shape[0]
         prob_shape = torch.Size([n, batch_size])
 
-        library_size = torch.sum(x, dim=1)
+        library_size = torch.sum(x, dim=1).to(x.device)
 
         log_p_z = torch.zeros(prob_shape, device=x.device)
         log_q_z_x = torch.zeros(prob_shape, device=x.device)
@@ -343,7 +343,7 @@ class ModelVAE(torch.nn.Module):
                    beta: float, epoch_num: int = None, likelihood_n: int = 500) -> Tuple[BatchStatsFloat, Outputs]:
         optimizer.zero_grad()
 
-        library_size = torch.sum(x_mb, dim=1)
+        library_size = torch.sum(x_mb, dim=1).to(self.device)
 
         x_mb = x_mb.to(self.device)
         y_mb = y_mb.to(self.device)

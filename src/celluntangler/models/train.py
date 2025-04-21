@@ -87,9 +87,11 @@ class Trainer:
 
         count = 0
         if visualize_information:
+            self.check_visualize_information(visualize_information)
             x = visualize_information["x"]
             y = visualize_information["y"]
-            a = self.model(torch.log1p(torch.tensor(x,device=visualization_information["device"])), torch.tensor(y,device=visualization_information["device"]))
+            device = visualization_information["device"]
+            a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
             b = a[4]
             embeddings_save_path = visualize_information["embeddings_save_path"]
             model_name = visualize_information["model_name"]
@@ -102,10 +104,12 @@ class Trainer:
             self.epoch += 1
             
             if visualize_information:
+                self.check_visualize_information(visualize_information)
                 if count in visualize_information["epochs"]:
                     x = visualize_information["x"]
                     y = visualize_information["y"]
-                    a = self.model(torch.log1p(torch.tensor(x,device=visualization_information["device"])), torch.tensor(y,device=visualization_information["device"]))
+                    device = visualization_information["device"]
+                    a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
                     b = a[4]
                     embeddings_save_path = visualize_information["embeddings_save_path"]
                     model_name = visualize_information["model_name"]
@@ -180,6 +184,12 @@ class Trainer:
 
         return CurvatureOptimizer(net_optimizer, neg=c_opt_neg, pos=c_opt_pos, should_do_curvature_step=condition)
 
+    def check_visualize_information(self, visualize_information):
+        required_keys = ["x", "y", "embeddings_save_path", "model_save_name", "epochs", "device"]
+        for each_key in required_keys:
+            if each_key not in visualize_information:
+                raise AssertionError(f"Need to specify {each_key} if want to save intermediate embeddings")
+    
     def plot_loss(self, desired_loss="elbo", save=None):
         epochs = sorted(self.epoch_train_results.keys())
 

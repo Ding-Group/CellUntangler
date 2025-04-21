@@ -63,7 +63,6 @@ class Trainer:
                        optimizer: Any,
                        train_data: DataLoader,
                        betas: Sequence[float],
-                       device: torch.device,
                        likelihood_n: int = 500,
                        max_epochs: int = 1000,
                        visualize_information = None
@@ -75,7 +74,13 @@ class Trainer:
         likelihood_n: How many samples to use to perform Monte Carlo integration to compute the log-likelihood.
         max_epochs: The number of epochs to train the model for.
         visualize_information: None to save no intermediate embeddings when training. A dictionary if saving
-         the intermediate embeddings is desired.
+         the intermediate embeddings is desired. Need the keys "x" and "y" where "x" is the full scRNA-seq dataset and "y" is the batch vector.
+         The keys "embeddings_save_path" and "model_name" are also needed where "embeddings_save_path" is the path to save the embeddings to
+          and "model_name" is the name of the model being used such as "r2, e10". The key "epochs" is needed and the value is a list
+           of integers which speicfy which epochs to save the embeddings for. The key "device" is needed to specify the device being used such as
+            torch.device("cpu") or torch.device("cuda").
+          In summary, visualization_information should contain the keys "x", "y", "embeddings_save_path", "model_name", "epochs", and "device"
+           if the intermediate embeddings during training are desired.
         """
         train_results = dict()
         test_results = dict()
@@ -84,7 +89,7 @@ class Trainer:
         if visualize_information:
             x = visualize_information["x"]
             y = visualize_information["y"]
-            a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
+            a = self.model(torch.log1p(torch.tensor(x,device=visualization_information["device"])), torch.tensor(y,device=visualization_information["device"]))
             b = a[4]
             embeddings_save_path = visualize_information["embeddings_save_path"]
             model_name = visualize_information["model_name"]
@@ -100,7 +105,7 @@ class Trainer:
                 if count in visualize_information["epochs"]:
                     x = visualize_information["x"]
                     y = visualize_information["y"]
-                    a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
+                    a = self.model(torch.log1p(torch.tensor(x,device=visualization_information["device"])), torch.tensor(y,device=visualization_information["device"]))
                     b = a[4]
                     embeddings_save_path = visualize_information["embeddings_save_path"]
                     model_name = visualize_information["model_name"]

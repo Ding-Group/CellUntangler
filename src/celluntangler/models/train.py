@@ -90,7 +90,7 @@ class Trainer:
             self.check_visualize_information(visualize_information)
             x = visualize_information["x"]
             y = visualize_information["y"]
-            device = visualization_information["device"]
+            device = visualize_information["device"]
             a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
             b = a[4]
             embeddings_save_path = visualize_information["embeddings_save_path"]
@@ -108,7 +108,7 @@ class Trainer:
                 if count in visualize_information["epochs"]:
                     x = visualize_information["x"]
                     y = visualize_information["y"]
-                    device = visualization_information["device"]
+                    device = visualize_information["device"]
                     a = self.model(torch.log1p(torch.tensor(x,device=device)), torch.tensor(y,device=device))
                     b = a[4]
                     embeddings_save_path = visualize_information["embeddings_save_path"]

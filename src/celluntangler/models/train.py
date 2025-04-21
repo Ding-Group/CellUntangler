@@ -185,7 +185,7 @@ class Trainer:
         return CurvatureOptimizer(net_optimizer, neg=c_opt_neg, pos=c_opt_pos, should_do_curvature_step=condition)
 
     def check_visualize_information(self, visualize_information):
-        required_keys = ["x", "y", "embeddings_save_path", "model_save_name", "epochs", "device"]
+        required_keys = ["x", "y", "embeddings_save_path", "model_name", "epochs", "device"]
         for each_key in required_keys:
             if each_key not in visualize_information:
                 raise AssertionError(f"Need to specify {each_key} if want to save intermediate embeddings")

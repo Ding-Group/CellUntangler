@@ -73,7 +73,10 @@ class UMIVaeDataset(VaeDataset):
             g.manual_seed(seed)
         else:
             g = None
-            
+
+        if is_sparse:
+            return DataLoader(dataset=dataset, batch_size=self.batch_size, num_workers=0, pin_memory=True, shuffle=train, generator=g, collate_fn=collate_fn)
+        
         return DataLoader(dataset=dataset, batch_size=self.batch_size,
                           num_workers=0, pin_memory=True, shuffle=train,
                           generator=g)

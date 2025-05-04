@@ -47,7 +47,7 @@ class UmiSparseDataset(Dataset):
 
     def __getitem__(self, i):
         if self.y is not None:
-            return self.x[i], self.y[i]
+            return self.x[i], torch.tensor(self.y[i])
         else:
             return self.x[i]
 
@@ -90,6 +90,6 @@ class UMIVaeDataset(VaeDataset):
 
 
 def collate_fn(batch):
-    batch_x = torch.stack([torch.tensor(item[0].todense().astype(np.double)) for item in batch])
+    batch_x = torch.stack([torch.squeeze(torch.tensor(item[0].todense().astype(np.double))) for item in batch])
     batch_y = torch.stack([item[1] for item in batch])
     return batch_x, batch_y

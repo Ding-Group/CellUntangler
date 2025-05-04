@@ -87,7 +87,7 @@ class UMIVaeDataset(VaeDataset):
         else:
             dataset = UmiDataset(x, y)
 
-        train_loader = self._load_synth(dataset, train=True, seed=seed, is_sparse=is_sparse)
+        train_loader = self._load_synth(dataset, train=train, seed=seed, is_sparse=is_sparse)
 
         return train_loader
 

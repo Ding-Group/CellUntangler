@@ -37,6 +37,21 @@ class UmiDataset(Dataset):
             return torch.tensor(data)
 
 
+class UmiSparseDataset(Dataset):
+    def __init__(self, x, y=None, transforms=None):
+        self.x = x
+        self.y = y
+
+    def __len__(self):
+        return self.x.shape[0]
+
+    def __getitem__(self, i):
+        if self.y is not None:
+            return self.x[i], self.y[i]
+        else:
+            return self.x[i]
+
+
 # https://stackoverflow.com/questions/41924453/pytorch-how-to-use-dataloaders-for-custom-datasets
 class UMIVaeDataset(VaeDataset):
 
@@ -49,7 +64,7 @@ class UMIVaeDataset(VaeDataset):
         np.random.seed(worker_seed)
         np.random.default_rng(worker_seed)
 
-    def _load_synth(self, dataset: UmiDataset, train: bool = True, seed: Optional[int] = None) -> DataLoader:
+    def _load_synth(self, dataset: UmiDataset, train: bool = True, seed: Optional[int] = None, is_sparse: bool = False) -> DataLoader:
         if seed:
             print("Dataset seed:", seed)
             np.random.seed(seed)
@@ -63,9 +78,12 @@ class UMIVaeDataset(VaeDataset):
                           num_workers=0, pin_memory=True, shuffle=train,
                           generator=g)
 
-    def create_loaders(self, x, y, train: bool = True, seed: Optional[int] = None) -> Tuple[DataLoader, DataLoader]:
-        dataset = UmiDataset(x, y)
+    def create_loaders(self, x, y, train: bool = True, seed: Optional[int] = None, is_sparse: bool = False) -> Tuple[DataLoader, DataLoader]:
+        if is_sparse:
+            dataset = UmiSparseDataset(x, y)
+        else:
+            dataset = UmiDataset(x, y)
 
-        train_loader = self._load_synth(dataset, train=True, seed=seed)
+        train_loader = self._load_synth(dataset, train=True, seed=seed, is_sparse=is_sparse)
 
         return train_loader

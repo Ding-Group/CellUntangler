@@ -87,3 +87,9 @@ class UMIVaeDataset(VaeDataset):
         train_loader = self._load_synth(dataset, train=True, seed=seed, is_sparse=is_sparse)
 
         return train_loader
+
+
+def collate_fn(batch):
+    batch_x = torch.stack([torch.tensor(item[0].todense().astype(np.double)) for item in batch])
+    batch_y = torch.stack([item[1] for item in batch])
+    return batch_x, batch_y

@@ -44,6 +44,8 @@ class NBVAE(ModelVAE):
         self.in_dim = dataset.in_dim
         self.h_dim = h_dim
 
+        self.device = config.device
+                     
         n_batch = config.n_batch
         if type(n_batch) != list:
             n_batch = [n_batch]
@@ -136,7 +138,7 @@ class NBVAE(ModelVAE):
         bs = concat_z.size(-2)
 
         if not use_z_batch:
-            batch = torch.zeros(batch.shape)
+            batch = torch.zeros(batch.shape).to(self.device)
         concat_z = torch.concat((concat_z, batch), dim=1)
         x = self.decoder(concat_z)
 

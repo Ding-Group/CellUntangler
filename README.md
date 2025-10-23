@@ -77,7 +77,7 @@ The values are the lists of indices for those latent subspaces for which to stop
 *E.g.*, `{1: [0]}` means when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$.
 `{1: [0], 2: [0, 1]}` would mean when reconstructing $\mathbf{x}^2$, the gradient should be stopped for $\mathbf{z}^1$ and when reconstructing $\mathbf{x}^3$, the gradient should be stopped for $\mathbf{z}^1$ and $\mathbf{z}^2$.
 
-When specifying `component_subspaces`, `config.use_z1_batch` and `config.use_z2_batch` are ignored. Instead, `component_batch` is used which is a dictionary with the same keys as `component_subspaces` and specifies True if the batch should be set to 0 when decoding and False otherwise.
+When specifying `component_subspaces`, `config.use_z1_batch` and `config.use_z2_batch` are ignored. Instead, `component_batch` is used which is a dictionary with the same keys as `component_subspaces` and specifies True if the batch should not be set to 0 when decoding and False otherwise.
 
 ### Recommendations
 #### One latent subspace

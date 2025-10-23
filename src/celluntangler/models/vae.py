@@ -106,6 +106,7 @@ class ModelVAE(torch.nn.Module):
                     self.z_masks.append(None)
         self.component_subspaces = component_subspaces
         self.component_no_grads = component_no_grads
+        self.component_batch = component_batch
 
         self.activation = config.activation
         
@@ -203,7 +204,7 @@ class ModelVAE(torch.nn.Module):
                         if epoch_num is not None:
                             if epoch_num >= self.config.start_z2_no_grad and epoch_num <= self.config.end_z2_no_grad:
                                 concat_z = self.create_concat_z_general(reparametrized, self.component_no_grads[i])
-                    mu_component, sigma_square_component = self.decode(concat_z * self.z_masks[i], self.batch)
+                    mu_component, sigma_square_component = self.decode(concat_z * self.z_masks[i], self.batch, self.component_batch[i])
                     
                     mu_component = mu_component[:,start:start+component_num_gene]
                     sigma_square_component = sigma_square_component[start:start+component_num_gene]

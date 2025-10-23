@@ -46,7 +46,7 @@ In the `CellUntangler` directory, we provide specific examples of using CellUnta
 We discuss the case of using one subspace or more than two subspaces below.
 
 ### Beyond the examples
-Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decompose the UMI count vector $\mathbf{x}$ into $k$ components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
+Given that the latent space is composed of $k$ different subspaces, $\mathbf{z}=(\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k)$, we decompose the UMI count vector $\mathbf{x}$ into $k$ disjoint components, $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^k$.
 Each component $\mathbf{x}^j$ is used to output the parameters of the posterior distribution $p(\mathbf{z}^j\mid\mathbf{x}^j)$.
 
 Importantly, CellUntangler has two parameters, `component_subspaces` and `component_no_grads`, which are `None` by default. These are the settings in the examples.
@@ -59,7 +59,7 @@ Indexing starts from 0, so both $\mathbf{x}^1$ and $\mathbf{z}^1$ have index 0, 
 Alternatively, `{0: [0], 1: [1]}` means $\mathbf{z}^1$ should be used to reconstruct $\mathbf{x}^1$ and $\mathbf{z}^2$ should be used to reconstruct $\mathbf{x}^2$.
 For one latent subspace, `component_subspaces` should always be `{0: [0]}`.
 
-For more than two subspaces, `component_subspaces` may look like `{[0]: [0], 1: [1], ..., k-1: [0, 1, ..., k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k$.
+For more than two subspaces, `component_subspaces` may look like `{0: [0], 1: [1], ..., k-1: [0, 1, ..., k-1]}` in which case, we use $\mathbf{z}^j$ to reconstruct $\mathbf{x}^j$ except for $\mathbf{x}^k$ where we use $\mathbf{z}^1,\mathbf{z}^2,\ldots,\mathbf{z}^k$.
 We may also specify multiple latent components for other $x^j$ besides $z^k$, such as `{0: [0], 1:[0, 1], ..., k-1: [0, 1, ..., k-1]}`. Now, $\mathbf{z^1}$ and $\mathbf{z}^2$ are used to reconstruct $\mathbf{x}^2$.
 Importantly, the dictionary should always contain the keys $0, 1, ..., k-1$ unless a component $\mathbf{x}^j$ is repeated.
 

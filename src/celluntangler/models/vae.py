@@ -60,7 +60,8 @@ class ModelVAE(torch.nn.Module):
                  dataset: VaeDataset,
                  config: ConfigDict,
                  component_subspaces=None,
-                 component_no_grads=None) -> None:
+                 component_no_grads=None,
+                 component_batch=None) -> None:
         """
         ModelVAE initializer
         :param h_dim: dimension of the hidden layers
@@ -92,7 +93,6 @@ class ModelVAE(torch.nn.Module):
             self.mask_z = torch.tensor(mask_z,device=self.device)
         else:
             self.z_masks=[]
-            mask_start=0
             for i in range(0, len(self.mask)):
                 if i in component_subspaces:
                     z_mask = np.zeros(dim_z)

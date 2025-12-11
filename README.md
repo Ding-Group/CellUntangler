@@ -94,8 +94,8 @@ This is with the idea that each latent subspace $\mathbf{z}^j$ will capture a de
 
 ## Citation
 [CellUntangler: Separating distinct biological signals in single-cell data wih deep generative models](https://www.cell.com/cell-genomics/fulltext/S2666-979X(25)00329-5)
-`
-﻿@Article{ref1,
+```
+﻿@article{celluntangler,
 author={Chen, Sarah
 and Regev, Aviv
 and Condon, Anne
@@ -109,4 +109,4 @@ issn={2666-979X},
 doi={10.1016/j.xgen.2025.101073},
 url={https://doi.org/10.1016/j.xgen.2025.101073}
 }
-`
+```

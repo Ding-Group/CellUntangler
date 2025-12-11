@@ -91,3 +91,6 @@ We recommend using a one-to-one correspondence where `j: [j]` or if multiple sub
 We recommend doing this for components $\mathbf{x}^1,\mathbf{x}^2,\ldots,\mathbf{x}^{k-1}$.
 For component $\mathbf{x}^k$, we recommend using all subspaces to reconstruct $\mathbf{x}^k$, so it will look like `k-1: [0, 1, ..., k-1]`.
 This is with the idea that each latent subspace $\mathbf{z}^j$ will capture a desired signal except for $\mathbf{z}^k$ which will capture all the remaining non-desired signals.
+
+## Citation
+[CellUntangler: Separating distinct biological signals in single-cell data wih deep generative models]<https://www.cell.com/cell-genomics/fulltext/S2666-979X(25)00329-5>

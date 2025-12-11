@@ -93,4 +93,4 @@ For component $\mathbf{x}^k$, we recommend using all subspaces to reconstruct $\
 This is with the idea that each latent subspace $\mathbf{z}^j$ will capture a desired signal except for $\mathbf{z}^k$ which will capture all the remaining non-desired signals.
 
 ## Citation
-[CellUntangler: Separating distinct biological signals in single-cell data wih deep generative models]<https://www.cell.com/cell-genomics/fulltext/S2666-979X(25)00329-5>
+[CellUntangler: Separating distinct biological signals in single-cell data wih deep generative models](https://www.cell.com/cell-genomics/fulltext/S2666-979X(25)00329-5)

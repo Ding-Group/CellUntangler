@@ -22,7 +22,8 @@ class NBVAE(ModelVAE):
                  dataset: VaeDataset,
                  config: ConfigDict,
                  component_subspaces=None,
-                 component_no_grads=None) -> None:
+                 component_no_grads=None, 
+                 component_batch=None) -> None:
         """
         h_dim: The last dimension of the encoder.
         components: The parsed list of latent components, one component for each subspace.
@@ -39,7 +40,8 @@ class NBVAE(ModelVAE):
                          dataset,
                          config,
                          component_subspaces,
-                         component_no_grads)
+                         component_no_grads,
+                         component_batch)
 
         self.in_dim = dataset.in_dim
         self.h_dim = h_dim
